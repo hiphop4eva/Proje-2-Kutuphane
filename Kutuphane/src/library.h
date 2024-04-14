@@ -1,19 +1,27 @@
 #pragma once
+#include "baseWindow.h"
 
 #include <vector>
 #include <string>
 #include <fstream>
+#include <sstream>
+
+struct DatabaseStruct {
+	std::stringstream stream;
+	std::vector<int> bookIDList;
+	std::vector<int> userIDList;
+};
 
 class ClassBook {
 public:
 	ClassBook(int ID, std::string title, int ownerID = 0, int timeBorrow = 0);
 	~ClassBook(){}
 
-	std::string GetTitle() { return title; }
-	int GetID() { return ID; }
+	std::string getTitle() { return title; }
+	int getID() { return ID; }
 
-	int GetOwnerID() { return ownerID; }
-	int GetTimeBorrow() { return timeBorrow; }
+	int getOwnerID() { return ownerID; }
+	int getTimeBorrow() { return timeBorrow; }
 
 protected:
 	int ID;
@@ -26,6 +34,9 @@ protected:
 class ClassUser {
 public:
 	ClassUser(int ID, std::string name);
+
+	int getID() { return ID; }
+	std::string getName() { return name; }
 
 protected:
 	int ID;
@@ -44,37 +55,53 @@ ClassUser::ClassUser(int ID, std::string name) : ID(ID), name(name) {
 	userList.push_back(*this);
 }
 
-bool saveDatabase() {
-	//std::string stringBuffer;
-	//std::ifstream fileBuffer;
-	//if (fileBuffer.is_open()) {
-	//	fileBuffer.read((char*)(stringBuffer.c_str()), fileBuffer.gcount());
-	//	fileBuffer.close();
-	//}
-	//else { 
-	//	fileBuffer.close();
-	//	return 0; 
-	//}
+DatabaseStruct readDatabase();
 
-	//stringBuffer.replace(stringBuffer.size() - 7, 7, "");
+bool saveDatabase() {
+	DatabaseStruct database = readDatabase();
+	{
+		std::string inter = database.stream.str();
+		inter.erase(inter.end() - 6, inter.end());
+		database.stream.str(inter);
+	}
+	database.stream.seekp(0, std::ios_base::end);
+
+	bool cont = true;
+
+	for (int i = 0; i < bookList.size(); i++) {
+		for (int k = 0; k < database.bookIDList.size(); k++) {
+			if (bookList[i].getID() == database.bookIDList[k]) { cont = false; break; }
+		}
+
+		if (cont == false) { cont = true; continue; }
+		database.stream << "Start book\n";
+		database.stream << bookList[i].getID() << "\n";
+		database.stream << bookList[i].getTitle() << "\n";
+		database.stream << bookList[i].getOwnerID() << "\n";
+		database.stream << bookList[i].getTimeBorrow() << "\n";
+		database.stream << "End book\n";
+	}
+	cont = true;
+	for (int i = 0; i < userList.size(); i++) {
+		for (int k = 0; k < database.userIDList.size(); k++) {
+			if (userList[i].getID() == database.userIDList[k]) { cont = false; break; }
+		}
+
+		if (cont == false) { cont = true; continue; }
+		database.stream << "Start user\n";
+		database.stream << userList[i].getID() << "\n";
+		database.stream << userList[i].getName() << "\n";
+		database.stream << "End user\n";
+	}
+
+	database.stream << "Final\n";
 
 	std::ofstream fileDatabase;
 	fileDatabase.open("Database.txt");
 
 	if (fileDatabase.is_open()) {
-		//fileDatabase.write(stringBuffer.c_str(), stringBuffer.size());
-
-		for (int i = 0; i < bookList.size(); i++) {
-
-			fileDatabase << "Start book\n";
-			fileDatabase << bookList[i].GetID()         << "\n";
-			fileDatabase << bookList[i].GetTitle()      << "\n";
-			fileDatabase << bookList[i].GetOwnerID()    << "\n";
-			fileDatabase << bookList[i].GetTimeBorrow() << "\n";
-			fileDatabase << "End book\n";
-			fileDatabase << "Final\n";
-		}
-
+		fileDatabase << database.stream.str();
+		
 		fileDatabase.close();
 	}
 	else {
@@ -85,11 +112,136 @@ bool saveDatabase() {
 	return 1;
 }
 
-bool loadDatabase() {
-	std::ifstream fileDatabase;
-	fileDatabase.open("Database.txt");
+void readDataBook(std::ifstream &file, std::string &input, DatabaseStruct &database) {
+	int id;
+	std::string title;
+	int ownerID;
+	int timeBorrow;
 
-	fileDatabase.close();
+	int readOrder = 1;
+	bool duplBreak = false;
 
-	return 1;
+	while (file) {
+		getline(file, input);
+		database.stream << input << "\n";
+
+		if (duplBreak == true) {
+			break;
+		}
+
+		if (input == "End book") {
+			ClassBook(id, title, ownerID, timeBorrow);
+			readOrder = 0;
+			break;
+		}
+		else if (readOrder == 1) {
+			id = atoi(input.c_str());;
+			database.bookIDList.push_back(id);
+			readOrder++;
+
+			for (int i = 0; i < bookList.size(); i++) {
+				if (id == bookList[i].getID()) {
+					duplBreak = true;
+				}
+			}
+		}
+		else if (readOrder == 2) {
+			title = input;
+			readOrder++;
+		}
+		else if (readOrder == 3) {
+			ownerID = atoi(input.c_str());
+			readOrder++;
+		}
+		else if (readOrder == 4) {
+			timeBorrow = atoi(input.c_str());
+			readOrder++;
+		}
+	}
 }
+
+void readDataUser(std::ifstream& file, std::string &input, DatabaseStruct &database) {
+	int id;
+	std::string name;
+
+	int readOrder = 1;
+	bool duplBreak = false;
+
+	while (file) {
+		getline(file, input);
+		database.stream << input << "\n";
+
+		if (duplBreak == true) {
+			break;
+		}
+
+		if (input == "End user") {
+			ClassUser(id, name);
+			readOrder = 0;
+			break;
+		}
+		else if (readOrder == 1) {
+			id = atoi(input.c_str());;
+			database.userIDList.push_back(id);
+			readOrder++;
+
+			for (int i = 0; i < userList.size(); i++) {
+				if (id == userList[i].getID()) {
+					duplBreak = true;
+				}
+			}
+		}
+		else if (readOrder == 2) {
+			name = input;
+			readOrder++;
+		}
+	}
+}
+
+DatabaseStruct readDatabase() {
+	std::ifstream file;
+	std::string input;
+	DatabaseStruct database;
+
+	file.open("Database.txt");
+
+	while (file) {
+		getline(file, input);
+		database.stream << input << "\n";
+
+		if (input == "Start book") {
+			readDataBook(file, input, database);
+		}
+		else if (input == "Start user") {
+			readDataUser(file, input, database);
+		}
+		
+		if (input == "Final") {
+			break;
+		}
+	}
+	file.close();
+
+	return database;
+}
+
+//DatabaseStruct returnDatabase() {
+//	DatabaseStruct DatabaseStruct;
+//	std::ifstream file;
+//	std::string input;
+//	std::stringstream database;
+//
+//	file.open("Database.txt");
+//
+//	while (file) {
+//		getline(file, input);
+//		database << input << "\n";
+//
+//		if (input == "Final") {
+//			break;
+//		}
+//	}
+//	file.close();
+//
+//	return DatabaseStruct;
+//}
