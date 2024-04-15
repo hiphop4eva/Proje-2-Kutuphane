@@ -1,10 +1,34 @@
 #pragma once
-#include "baseWindow.h"
 
 #include <vector>
 #include <string>
 #include <fstream>
 #include <sstream>
+
+std::wstring widen(std::string narrow) {
+	wchar_t* buffer = new wchar_t[narrow.length() + 1];
+	std::copy(narrow.begin(), narrow.end(), buffer);
+	buffer[narrow.length()] = 0;
+
+	std::wstring wide;
+	wide.append(buffer);
+
+	delete[] buffer;
+	return wide;
+}
+
+std::wstring widen(int narrowInt) {
+	std::string narrow = std::to_string(narrowInt);
+	wchar_t* buffer = new wchar_t[narrow.length() + 1];
+	std::copy(narrow.begin(), narrow.end(), buffer);
+	buffer[narrow.length()] = 0;
+
+	std::wstring wide;
+	wide.append(buffer);
+
+	delete[] buffer;
+	return wide;
+}
 
 struct DatabaseStruct {
 	std::stringstream stream;
@@ -224,24 +248,3 @@ DatabaseStruct readDatabase() {
 
 	return database;
 }
-
-//DatabaseStruct returnDatabase() {
-//	DatabaseStruct DatabaseStruct;
-//	std::ifstream file;
-//	std::string input;
-//	std::stringstream database;
-//
-//	file.open("Database.txt");
-//
-//	while (file) {
-//		getline(file, input);
-//		database << input << "\n";
-//
-//		if (input == "Final") {
-//			break;
-//		}
-//	}
-//	file.close();
-//
-//	return DatabaseStruct;
-//}
