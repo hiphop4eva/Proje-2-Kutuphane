@@ -9,7 +9,6 @@ int WINAPI wWinMain(HINSTANCE hinstance, HINSTANCE, PWSTR pCmdLine, int nCmdShow
 	if (!win.Create(L"Main Window", WS_OVERLAPPEDWINDOW)) {
 		return 1;
 	}
-
 	ShowWindow(win.Window(), nCmdShow);
 
 	MSG msg = {};
@@ -19,4 +18,4 @@ int WINAPI wWinMain(HINSTANCE hinstance, HINSTANCE, PWSTR pCmdLine, int nCmdShow
 	}
 
 	return 0;
- }
+}

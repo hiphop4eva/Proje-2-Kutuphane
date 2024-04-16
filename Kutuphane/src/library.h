@@ -4,31 +4,7 @@
 #include <string>
 #include <fstream>
 #include <sstream>
-
-std::wstring widen(std::string narrow) {
-	wchar_t* buffer = new wchar_t[narrow.length() + 1];
-	std::copy(narrow.begin(), narrow.end(), buffer);
-	buffer[narrow.length()] = 0;
-
-	std::wstring wide;
-	wide.append(buffer);
-
-	delete[] buffer;
-	return wide;
-}
-
-std::wstring widen(int narrowInt) {
-	std::string narrow = std::to_string(narrowInt);
-	wchar_t* buffer = new wchar_t[narrow.length() + 1];
-	std::copy(narrow.begin(), narrow.end(), buffer);
-	buffer[narrow.length()] = 0;
-
-	std::wstring wide;
-	wide.append(buffer);
-
-	delete[] buffer;
-	return wide;
-}
+#include <codecvt>
 
 struct DatabaseStruct {
 	std::stringstream stream;
@@ -57,15 +33,17 @@ protected:
 
 class ClassUser {
 public:
-	ClassUser(int ID, std::string name);
+	ClassUser(int ID, std::string name, std::string password);
 
 	int getID() { return ID; }
 	std::string getName() { return name; }
+	std::string getPassword() { return password; }
 
 protected:
 	int ID;
 	std::string name;
-
+	std::string password;
+	bool registered = false;
 };
 
 std::vector<ClassBook> bookList;
@@ -75,7 +53,7 @@ ClassBook::ClassBook(int ID, std::string title, int ownerID, int timeBorrow) : I
 	bookList.push_back(*this);
 }
 
-ClassUser::ClassUser(int ID, std::string name) : ID(ID), name(name) {
+ClassUser::ClassUser(int ID, std::string name, std::string password) : ID(ID), name(name), password(password) {
 	userList.push_back(*this);
 }
 
@@ -115,6 +93,7 @@ bool saveDatabase() {
 		database.stream << "Start user\n";
 		database.stream << userList[i].getID() << "\n";
 		database.stream << userList[i].getName() << "\n";
+		database.stream << userList[i].getPassword() << "\n";
 		database.stream << "End user\n";
 	}
 
@@ -187,6 +166,7 @@ void readDataBook(std::ifstream &file, std::string &input, DatabaseStruct &datab
 void readDataUser(std::ifstream& file, std::string &input, DatabaseStruct &database) {
 	int id;
 	std::string name;
+	std::string password;
 
 	int readOrder = 1;
 	bool duplBreak = false;
@@ -200,7 +180,7 @@ void readDataUser(std::ifstream& file, std::string &input, DatabaseStruct &datab
 		}
 
 		if (input == "End user") {
-			ClassUser(id, name);
+			ClassUser(id, name, password);
 			readOrder = 0;
 			break;
 		}
@@ -217,6 +197,10 @@ void readDataUser(std::ifstream& file, std::string &input, DatabaseStruct &datab
 		}
 		else if (readOrder == 2) {
 			name = input;
+			readOrder++;
+		}
+		else if (readOrder == 3) {
+			password = input;
 			readOrder++;
 		}
 	}
