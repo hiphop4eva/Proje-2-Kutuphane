@@ -50,8 +50,6 @@ std::string Narrowen(int wideInt) {
 	return r;
 }
 
-bool saveDatabase();
-
 void UpdateWindowBook(HWND log, HWND comboBoxBook);
 void UpdateWindowUser(HWND log, HWND comboBoxBook);
 
@@ -106,9 +104,6 @@ protected:
 
 class MainWindow : public BaseWindow<MainWindow> {
 public:
-	std::string name;
-	std::string password;
-
 	HWND loginUserBorder;
 	HWND loginUserBox;
 	HWND loginPasswordBox;
@@ -116,6 +111,7 @@ public:
 	HWND loginPassword;
 	HWND buttonLogin;
 	HWND buttonRegister;
+	HWND buttonLogout;
 
 	HWND log;
 	HWND buttonSave;
@@ -133,11 +129,13 @@ public:
 	int colLoginPassword = colLoginUser;
 	int colButtonLogin = colLoginBorder;
 	int colButtonRegister = colButtonLogin + 60;
+	int colButtonLogout = colButtonLogin;
 	int rowLoginUser = 20;
 	int rowLoginBorder = rowLoginUser - 20;
 	int rowLoginPassword = rowLoginUser + 40;
 	int rowButtonLogin = rowLoginBorder + 100;
 	int rowButtonRegister = rowButtonLogin;
+	int rowButtonLogout = rowButtonLogin;
 
 	int colLog = 350;
 	int colSave = colLog;
@@ -166,11 +164,27 @@ public:
 			}
 			else if (name == userList[i].getName()) {
 				if (password == userList[i].getPassword()) {
+					userList[i].login();
 					return feedback = userList[i].getID();
 				}
 				else {
 					return feedback = -2;
 				}
+			}
+		}
+		return feedback;
+	}
+
+	int Logout() {
+		int feedback = 0;
+
+		for (int i = 0; i <= userList.size(); i++) {
+			if (i == userList.size()) {
+				return feedback = -1;
+			}
+			else if (userList[i].getLogin() == true) {
+				userList[i].logout();
+				return userList[i].getID();
 			}
 		}
 		return feedback;
@@ -202,6 +216,83 @@ public:
 		ShowWindow(buttonCancel, SW_HIDE);
 	}
 
+	void SwitchLogin(int mode) {
+		if (mode == 1) {
+			ShowWindow(loginUser, SW_HIDE);
+			ShowWindow(loginPassword, SW_HIDE);
+			ShowWindow(buttonLogin, SW_HIDE);
+			ShowWindow(buttonRegister, SW_HIDE);
+
+			ShowWindow(loginUserBox, SW_SHOW);
+			ShowWindow(loginPasswordBox, SW_SHOW);
+			ShowWindow(buttonLogout, SW_SHOW);
+		}
+		else if (mode == 0) {
+			ShowWindow(loginUser, SW_SHOW);
+			ShowWindow(loginPassword, SW_SHOW);
+			ShowWindow(buttonLogin, SW_SHOW);
+			ShowWindow(buttonRegister, SW_SHOW);
+
+			ShowWindow(loginUserBox, SW_HIDE);
+			ShowWindow(loginPasswordBox, SW_HIDE);
+			ShowWindow(buttonLogout, SW_HIDE);
+		}
+	}
+
+	void InsertToCBoxBook() {
+		bool cont = true;
+		int count = SendMessage(comboBoxBook, CB_GETCOUNT, (WPARAM)0, (LPARAM)0);
+		int len;
+		std::wstring title;
+		std::string titleNarrow;
+
+		for (int i = 0; i < bookList.size(); i++) {
+			for (int k = 0; k < count; k++) {
+				len = SendMessage(comboBoxBook, CB_GETLBTEXTLEN, k, (LPARAM)0);
+				title.resize(len);
+				title = SendMessage(comboBoxBook, CB_GETLBTEXT, k, (LPARAM)&title.c_str()[0]);
+				titleNarrow = Narrowen(title);
+				if (bookList[i].getTitle() == titleNarrow) {
+					cont = false;
+					break;
+				}
+			}
+
+			if (cont == false) { cont = true; continue; }
+			std::string insertNarrow = bookList[i].getTitle();
+			std::wstring insertWide = Widen(insertNarrow);
+
+			SendMessage(comboBoxBook, CB_INSERTSTRING, (WPARAM)i, (LPARAM)insertWide.c_str());
+		}
+	}
+
+	void InsertToCBoxUser() {
+		bool cont = true;
+		int count = SendMessage(comboBoxUser, CB_GETCOUNT, (WPARAM)0, (LPARAM)0);
+		int len;
+		std::wstring name;
+		std::string nameNarrow;
+
+		for (int i = 0; i < userList.size(); i++) {
+			for (int k = 0; k < count; k++) {
+				len = SendMessage(comboBoxUser, CB_GETLBTEXTLEN, k, (LPARAM)0);
+				name.resize(len);
+				SendMessage(comboBoxUser, CB_GETLBTEXT, k, (LPARAM)&name.c_str()[0]);
+				nameNarrow = Narrowen(name);
+				if (userList[i].getName() == nameNarrow) {
+					cont = false;
+					break;
+				}
+			}
+
+			if (cont == false) { cont = true; continue; }
+			std::string insertNarrow = userList[i].getName();
+			std::wstring insertWide = Widen(insertNarrow);
+
+			SendMessage(comboBoxUser, CB_INSERTSTRING, (WPARAM)i, (LPARAM)insertWide.c_str());
+		}
+	}
+
 	PCWSTR ClassName() const { return L"Main Window"; }
 	LRESULT HandleMessage(UINT uMsg, WPARAM wparam, LPARAM lparam) {
 		switch (uMsg) {
@@ -214,13 +305,14 @@ public:
 			loginPassword    = CreateWindow(WC_EDIT,   L"", WS_VISIBLE | WS_CHILD | WS_BORDER, colLoginPassword, rowLoginPassword, 80, 20, m_hwnd, NULL, NULL, NULL);
 			buttonLogin      = CreateWindow(WC_BUTTON, L"Login",    WS_VISIBLE | WS_CHILD | WS_BORDER, colButtonLogin, rowButtonLogin, 50, 20, m_hwnd, NULL, NULL, NULL);
 			buttonRegister   = CreateWindow(WC_BUTTON, L"Register", WS_VISIBLE | WS_CHILD | WS_BORDER, colButtonRegister, rowButtonRegister, 60, 20, m_hwnd, NULL, NULL, NULL);
+			buttonLogout      = CreateWindow(WC_BUTTON, L"Logout",                WS_CHILD | WS_BORDER, colButtonLogout, rowButtonLogout, 50, 20, m_hwnd, NULL, NULL, NULL);
 			
 			log             = CreateWindow(WC_EDIT    , L""    , WS_VISIBLE | WS_CHILD | ES_AUTOHSCROLL | ES_MULTILINE, colLog, rowLog, 300, 300, m_hwnd, (HMENU)1, NULL, NULL);
 			buttonSave      = CreateWindow(WC_BUTTON  , L"Save", WS_VISIBLE | WS_CHILD | WS_BORDER     , colSave, rowSave, 60, 20, m_hwnd, (HMENU)2, NULL, NULL);
 			buttonAdd       = CreateWindow(WC_BUTTON  , L"Add" , WS_VISIBLE | WS_CHILD | WS_BORDER     , colAdd, rowAdd, 60, 20, m_hwnd, (HMENU)6, NULL, NULL);
-			comboBoxPrimary = CreateWindow(WC_COMBOBOX, L""  , WS_VISIBLE | WS_CHILD | WS_OVERLAPPED | CBS_DROPDOWNLIST | CBS_HASSTRINGS, colCBoxPrim, rowCBoxPrim, 80, 100, m_hwnd, (HMENU)3, NULL, NULL);
-			comboBoxBook    = CreateWindow(WC_COMBOBOX, L""  ,              WS_CHILD | WS_OVERLAPPED | CBS_DROPDOWNLIST | CBS_HASSTRINGS, colCBoxSec , rowCBoxSec, 100, 100, m_hwnd, (HMENU)4, NULL, NULL);
-			comboBoxUser    = CreateWindow(WC_COMBOBOX, L""  ,              WS_CHILD | WS_OVERLAPPED | CBS_DROPDOWNLIST | CBS_HASSTRINGS, colCBoxSec , rowCBoxSec, 100, 100, m_hwnd, (HMENU)5, NULL, NULL);
+			comboBoxPrimary = CreateWindow(WC_COMBOBOX, L""  , WS_VISIBLE | WS_CHILD | WS_OVERLAPPED | CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | CBS_HASSTRINGS, colCBoxPrim, rowCBoxPrim, 80, 500, m_hwnd, (HMENU)3, NULL, NULL);
+			comboBoxBook    = CreateWindow(WC_COMBOBOX, L""  ,              WS_CHILD | WS_OVERLAPPED | CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | CBS_HASSTRINGS, colCBoxSec , rowCBoxSec, 100, 500, m_hwnd, (HMENU)4, NULL, NULL);
+			comboBoxUser    = CreateWindow(WC_COMBOBOX, L""  ,              WS_CHILD | WS_OVERLAPPED | CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | CBS_HASSTRINGS, colCBoxSec , rowCBoxSec, 100, 500, m_hwnd, (HMENU)5, NULL, NULL);
 			
 			logAdd       = CreateWindow(WC_EDIT    , L"" , WS_CHILD | ES_AUTOHSCROLL | ES_MULTILINE, colLogAdd, rowLogAdd, 300, 300, m_hwnd, (HMENU)7, NULL, NULL);
 			buttonCancel = CreateWindow(WC_BUTTON  , L"Cancel" , WS_CHILD | WS_BORDER , colCancel, rowCancel, 60, 20, m_hwnd, (HMENU)9, NULL, NULL);
@@ -231,12 +323,7 @@ public:
 			SendMessage(comboBoxPrimary, CB_SETCURSEL, (WPARAM)0, (LPARAM)0);
 			
 			if (!bookList.empty()) {
-				for (int i = 0; i < bookList.size(); i++) {
-					std::string insertNarrow = bookList[i].getTitle();
-					std::wstring insertWide = Widen(insertNarrow);
-
-					SendMessage(comboBoxBook, CB_INSERTSTRING, (WPARAM)i, (LPARAM)insertWide.c_str());
-				}
+				InsertToCBoxBook();
 				SendMessage(comboBoxBook, CB_SETCURSEL, (WPARAM)0, (LPARAM)0);
 			}
 			else {
@@ -244,22 +331,18 @@ public:
 			}
 			
 			if (!userList.empty()) {
-				for (int i = 0; i < userList.size(); i++) {
-					std::string insertNarrow = userList[i].getName();
-					std::wstring insertWide = Widen(insertNarrow);
-
-					SendMessage(comboBoxUser, CB_INSERTSTRING, (WPARAM)i, (LPARAM)insertWide.c_str());
-				}
+				InsertToCBoxUser();
 				SendMessage(comboBoxUser, CB_SETCURSEL, (WPARAM)0, (LPARAM)0);
 			}
 			else {
 				SendMessage(comboBoxUser, CB_SETCURSEL, (WPARAM)-1, (LPARAM)0);
 			}
 
-			ShowWindow(comboBoxBook, SW_SHOW);
 			ShowWindow(comboBoxUser, SW_HIDE);
+			ShowWindow(comboBoxBook, SW_SHOW);
 			UpdateWindowBook(log, comboBoxBook);
-
+			UpdateWindowUser(log, comboBoxBook);
+			
 			return 0;
 
 		case WM_COMMAND: {
@@ -294,8 +377,39 @@ public:
 						MessageBox(m_hwnd, L"Password is incorrect.", L"Error", MB_OK);
 					}
 					else {
-						MessageBox(m_hwnd, L"Login successfull.", L"Success", MB_OK);
+						SwitchLogin(1);
 						SendMessage(loginUserBorder, WM_SETTEXT, NULL, (LPARAM)L"Registered");
+						SendMessage(loginUser, WM_SETTEXT, NULL, (LPARAM)L"");
+						SendMessage(loginPassword, WM_SETTEXT, NULL, (LPARAM)L"");
+						MessageBox(m_hwnd, L"Login successful.", L"Success", MB_OK);
+					}
+				}
+				else if (lparam == LPARAM(buttonLogout)) {
+						SwitchLogin(0);
+						SendMessage(loginUserBorder, WM_SETTEXT, NULL, (LPARAM)L"Login");
+						Logout();
+						MessageBox(m_hwnd, L"Logout successful.", L"Success", MB_OK);
+				}
+				else if (lparam == LPARAM(buttonRegister)) {
+					int confirm = MessageBox(m_hwnd, L"Do you want to register a user with this name and password?", L"Confirm", MB_OKCANCEL);
+					if (confirm == IDOK) {
+						std::wstring name;
+						std::wstring password;
+						name.resize(SendMessage(loginUser, WM_GETTEXTLENGTH, (WPARAM)0, (LPARAM)0));
+						password.resize(SendMessage(loginPassword, WM_GETTEXTLENGTH, (WPARAM)0, (LPARAM)0));
+						SendMessage(loginUser, WM_GETTEXT, (WPARAM)name.size() + 1, (LPARAM)name.c_str());
+						SendMessage(loginPassword, WM_GETTEXT, (WPARAM)password.size() + 1, (LPARAM)password.c_str());
+						ClassUser(userList.size() + 1, Narrowen(name), Narrowen(password));
+						saveDatabase();
+						readDatabase();
+						InsertToCBoxUser();
+
+						Login(Narrowen(name), Narrowen(password));
+						SwitchLogin(1);
+						SendMessage(loginUserBorder, WM_SETTEXT, NULL, (LPARAM)L"Registered");
+						SendMessage(loginUser, WM_SETTEXT, NULL, (LPARAM)L"");
+						SendMessage(loginPassword, WM_SETTEXT, NULL, (LPARAM)L"");
+						MessageBox(m_hwnd, L"Register successful.", L"Success", MB_OK);
 					}
 				}
 				return 0;

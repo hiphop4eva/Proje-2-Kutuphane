@@ -38,12 +38,19 @@ public:
 	int getID() { return ID; }
 	std::string getName() { return name; }
 	std::string getPassword() { return password; }
+	bool getMod() { return isMod; }
+	bool getLogin() { return loggedIn; }
+
+	void login() { loggedIn = true; }
+	void logout() { loggedIn = false; }
 
 protected:
 	int ID;
 	std::string name;
 	std::string password;
-	bool registered = false;
+	bool loggedIn = false;
+	bool isMod = false;
+
 };
 
 std::vector<ClassBook> bookList;
