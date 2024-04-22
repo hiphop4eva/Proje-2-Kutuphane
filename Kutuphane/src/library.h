@@ -19,10 +19,15 @@ public:
 
 	std::string getTitle() { return title; }
 	int getID() { return ID; }
-
 	int getOwnerID() { return ownerID; }
 	int getTimeBorrow() { return timeBorrow; }
 
+	void SetOwnerID(int newOwnerID) {
+		ownerID = newOwnerID;
+	}
+	void SetTimeBorrow(int newTimeBorrow) {
+		timeBorrow = newTimeBorrow;
+	}
 protected:
 	int ID;
 	std::string title;
@@ -33,7 +38,7 @@ protected:
 
 class ClassUser {
 public:
-	ClassUser(int ID, std::string name, std::string password);
+	ClassUser(int ID, std::string name, std::string password, bool isMod);
 
 	int getID() { return ID; }
 	std::string getName() { return name; }
@@ -60,7 +65,7 @@ ClassBook::ClassBook(int ID, std::string title, int ownerID, int timeBorrow) : I
 	bookList.push_back(*this);
 }
 
-ClassUser::ClassUser(int ID, std::string name, std::string password) : ID(ID), name(name), password(password) {
+ClassUser::ClassUser(int ID, std::string name, std::string password, bool isMod) : ID(ID), name(name), password(password), isMod(isMod) {
 	userList.push_back(*this);
 }
 
@@ -101,6 +106,7 @@ bool saveDatabase() {
 		database.stream << userList[i].getID() << "\n";
 		database.stream << userList[i].getName() << "\n";
 		database.stream << userList[i].getPassword() << "\n";
+		database.stream << userList[i].getMod() << "\n";
 		database.stream << "End user\n";
 	}
 
@@ -174,6 +180,7 @@ void readDataUser(std::ifstream& file, std::string &input, DatabaseStruct &datab
 	int id;
 	std::string name;
 	std::string password;
+	bool mod;
 
 	int readOrder = 1;
 	bool duplBreak = false;
@@ -187,7 +194,7 @@ void readDataUser(std::ifstream& file, std::string &input, DatabaseStruct &datab
 		}
 
 		if (input == "End user") {
-			ClassUser(id, name, password);
+			ClassUser(id, name, password, mod);
 			readOrder = 0;
 			break;
 		}
@@ -208,6 +215,15 @@ void readDataUser(std::ifstream& file, std::string &input, DatabaseStruct &datab
 		}
 		else if (readOrder == 3) {
 			password = input;
+			readOrder++;
+		}
+		else if (readOrder == 4) {
+			if (input == "1") {
+				mod = true;
+			}
+			else {
+				mod = false;
+			}
 			readOrder++;
 		}
 	}

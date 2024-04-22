@@ -14,10 +14,12 @@ Start user
 1
 Burak
 muz
+1
 End user
 Start user
 2
 karub
 
+0
 End user
 Final
