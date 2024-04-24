@@ -6,14 +6,6 @@
 #include <windowsx.h>
 #include <CommCtrl.h>
 
-struct LogStruct {
-	HWND LogID;
-	HWND LogTitle;
-	HWND LogIsOwned;
-	HWND LogTimeBorrow;
-	HWND LogOwnerID;
-};
-
 std::wstring Widen(std::string narrow) {
 	wchar_t* buffer = new wchar_t[narrow.length() + 1];
 	std::copy(narrow.begin(), narrow.end(), buffer);
@@ -58,9 +50,6 @@ std::string Narrowen(int wideInt) {
 	return r;
 }
 
-void UpdateWindowBook(LogStruct logStruct, HWND comboBoxBook);
-void UpdateWindowUser(LogStruct logStruct, HWND comboBoxBook);
-
 template <class C>
 class BaseWindow {
 public:
@@ -87,7 +76,7 @@ public:
 
 	BaseWindow() : m_hwnd(NULL) {}
 
-	BOOL Create(PCWSTR WindowName, DWORD Style, DWORD ExStyle = 0, int x = CW_USEDEFAULT, int y = CW_USEDEFAULT, int width = CW_USEDEFAULT, int height = CW_USEDEFAULT, HWND hwndParent = 0, HMENU hmenu = 0) {
+	BOOL Create(PCWSTR WindowName, DWORD Style, DWORD ExStyle = 0, int x = CW_USEDEFAULT, int y = CW_USEDEFAULT, int width = CW_USEDEFAULT, int height = 550, HWND hwndParent = 0, HMENU hmenu = 0) {
 		WNDCLASS wnd = {0};
 
 		wnd.lpfnWndProc = C::WindowProc;
@@ -121,20 +110,67 @@ public:
 	HWND buttonRegister;
 	HWND buttonLogout;
 
-	HWND logID;
-	HWND logTitle;
-	HWND logIsOwned;
-	HWND logTimeBorrow;
-	HWND logOwnerID;
+	HWND logID; //1
+	HWND logTitle; //2
+	HWND logIsOwned; //3
+	HWND logTimeBorrow; //4
+	HWND logOwnerID; //5
+	HWND logPlaceNumber; //6
+	HWND logCopy; //7
+	HWND logLibrary; //8
+	HWND logSection; //9
+	HWND logCollection; //10
+	HWND logSubSection; //11
+	HWND logShape; //12
+	HWND logEnviroment; //13
+	HWND logLang; //14
+	HWND logAuthor; //15
+	HWND logResponsible; //16
+	HWND logYear; //17
+	HWND logISBN; //18
+	HWND logInfo; //19
+	HWND logPublisher; //20
+	HWND logEdition; //21
+	HWND logPhysAttrib; //22
+	HWND logSerialRec; //23
+	HWND logSubject; //24
+	HWND logNotes; //25
+	HWND logName; //26
+	HWND logIsMod; //27
 
-	HWND textID;
-	HWND textTitle;
-	HWND textIsOwned;
-	HWND textTimeBorrow;
-	HWND textOwnerID;
+	HWND textID; //1
+	HWND textTitle; //2
+	HWND textIsOwned; //3
+	HWND textTimeBorrow; //4
+	HWND textOwnerID; //5
+	HWND textPlaceNumber; //6
+	HWND textCopy; //7
+	HWND textLibrary; //8
+	HWND textSection; //9
+	HWND textCollection; //10
+	HWND textSubSection; //11
+	HWND textShape; //12
+	HWND textEnviroment; //13
+	HWND textLang; //14
+	HWND textAuthor; //15
+	HWND textResponsible; //16
+	HWND textYear; //17
+	HWND textISBN; //18
+	HWND textInfo; //19
+	HWND textPublisher; //20
+	HWND textEdition; //21
+	HWND textPhysAttrib; //22
+	HWND textSerialRec; //23
+	HWND textSubject; //24
+	HWND textNotes; //25
+	HWND textName; //26
+	HWND textIsMod; //27
 
-	HWND buttonBorrow;
 	HWND buttonAdd;
+	HWND buttonBorrow;
+	HWND buttonDelete;
+	HWND buttonMakeMod;
+
 	HWND comboBoxPrimary;
 	HWND comboBoxBook;
 	HWND comboBoxUser;
@@ -155,34 +191,121 @@ public:
 	int rowButtonRegister = rowButtonLogin;
 	int rowButtonLogout = rowButtonLogin;
 
-	int colLogID = 450;
-	int colLogTitle = colLogID;
-	int colLogIsOwned = colLogID;
-	int colLogTimeBorrow = colLogID;
-	int colLogOwnerID = colLogID;
-	int rowLogID = 10;
-	int rowLogTitle = rowLogID + 20;
-	int rowLogIsOwned = rowLogTitle + 20;
-	int rowLogTimeBorrow = rowLogIsOwned + 20;
-	int rowLogOwnerID = rowLogTimeBorrow + 20;
+	int colLogID = 450; //1
+	int colLogTitle = colLogID; //2
+	int colLogIsOwned = colLogID; //3
+	int colLogTimeBorrow = colLogID; //4
+	int colLogOwnerID = colLogID; //5
+	int colLogPlaceNumber = colLogID; //6
+	int colLogCopy = colLogID; //7
+	int colLogLibrary = colLogID; //8
+	int colLogSection = colLogID; //9
+	int colLogCollection = colLogID; //10
+	int colLogSubSection = colLogID; //11
+	int colLogShape = colLogID; //12
+	int colLogEnviroment = colLogID; //13
+	int colLogLang = colLogID; //14
+	int colLogAuthor = colLogID; //15
+	int colLogResponsible = colLogID; //16
+	int colLogYear = colLogID; //17
+	int colLogISBN = colLogID; //18
+	int colLogInfo = colLogID; //19
+	int colLogPublisher = colLogID; //20
+	int colLogEdition = colLogID; //21
+	int colLogPhysAttrib = colLogID; //22
+	int colLogSerialRec = colLogID; //23
+	int colLogSubject = colLogID; //24
+	int colLogNotes = colLogID; //25
+	
+    int rowLogID = 10; //1
+	int rowLogTitle = rowLogID + 20; //2
+	int rowLogIsOwned = rowLogTitle + 20; //3
+	int rowLogTimeBorrow = rowLogIsOwned + 20; //4
+	int rowLogOwnerID = rowLogTimeBorrow + 20; //5
+	int rowLogPlaceNumber = rowLogOwnerID + 20; //6
+	int rowLogCopy = rowLogPlaceNumber + 20; //7
+	int rowLogLibrary = rowLogCopy + 20; //8
+	int rowLogSection = rowLogLibrary + 20; //9
+	int rowLogCollection = rowLogSection + 20; //10
+	int rowLogSubSection = rowLogCollection + 20; //11
+	int rowLogShape = rowLogSubSection + 20; //12
+	int rowLogEnviroment = rowLogShape + 20; //13
+	int rowLogLang = rowLogEnviroment + 20; //14
+	int rowLogAuthor = rowLogLang + 20; //15
+	int rowLogResponsible = rowLogAuthor + 20; //16
+	int rowLogYear = rowLogResponsible + 20; //17
+	int rowLogISBN = rowLogYear + 20; //18
+	int rowLogInfo = rowLogISBN + 20; //19
+	int rowLogPublisher = rowLogInfo + 20; //20
+	int rowLogEdition = rowLogPublisher + 20; //21
+	int rowLogPhysAttrib = rowLogEdition + 20; //22
+	int rowLogSerialRec = rowLogPhysAttrib + 20; //23
+	int rowLogSubject = rowLogSerialRec + 20; //24
+	int rowLogNotes = rowLogSubject + 20; //25
 
-	int colTextID = colLogID - 100;
-	int colTextTitle = colLogTitle - 100;
-	int colTextIsOwned = colLogIsOwned - 100;
-	int colTextTimeBorrow = colLogTimeBorrow - 100;
-	int colTextOwnerID = colLogOwnerID - 100;
-	int rowTextID = rowLogID;
-	int rowTextTitle = rowLogTitle;
-	int rowTextIsOwned = rowLogIsOwned;
-	int rowTextTimeBorrow = rowLogTimeBorrow;
-	int rowTextOwnerID = rowLogOwnerID;
+	int colTextID = colLogID - 100; //1
+	int colTextTitle = colLogTitle - 100; //2
+	int colTextIsOwned = colLogIsOwned - 100; //3
+	int colTextTimeBorrow = colLogTimeBorrow - 100; //4
+	int colTextOwnerID = colLogOwnerID - 100; //5
+	int colTextPlaceNumber = colLogPlaceNumber - 100; //6
+	int colTextCopy = colLogCopy - 100; //7
+	int colTextLibrary = colLogLibrary - 100; //8
+	int colTextSection = colLogSection - 100; //9
+	int colTextCollection = colLogCollection - 100; //10
+	int colTextSubSection = colLogSubSection - 100; //11
+	int colTextShape = colLogShape - 100; //12
+	int colTextEnviroment = colLogEnviroment - 100; //13
+	int colTextLang = colLogLang - 100; //14
+	int colTextAuthor = colLogAuthor - 100; //15
+	int colTextResponsible = colLogResponsible - 100; //16
+	int colTextYear = colLogYear - 100; //17
+	int colTextISBN = colLogISBN - 100; //18
+	int colTextInfo = colLogInfo - 100; //19
+	int colTextPublisher = colLogPublisher - 100; //20
+	int colTextEdition = colLogEdition - 100; //21
+	int colTextPhysAttrib = colLogPhysAttrib - 100; //22
+	int colTextSerialRec = colLogSerialRec - 100; //23
+	int colTextSubject = colLogSubject - 100; //24
+	int colTextNotes = colLogNotes - 100; //25
+
+	int rowTextID = rowLogID; //1
+	int rowTextTitle = rowLogTitle; //2
+	int rowTextIsOwned = rowLogIsOwned; //3
+	int rowTextTimeBorrow = rowLogTimeBorrow; //4
+	int rowTextOwnerID = rowLogOwnerID; //5
+	int rowTextPlaceNumber = rowLogPlaceNumber; //6
+	int rowTextCopy = rowLogCopy; //7
+	int rowTextLibrary = rowLogLibrary; //8
+	int rowTextSection = rowLogSection; //9
+	int rowTextCollection = rowLogCollection; //10
+	int rowTextSubSection = rowLogSubSection; //11
+	int rowTextShape = rowLogShape; //12
+	int rowTextEnviroment = rowLogEnviroment; //13
+	int rowTextLang = rowLogLang; //14
+	int rowTextAuthor = rowLogAuthor; //15
+	int rowTextResponsible = rowLogResponsible; //16
+	int rowTextYear = rowLogYear; //17
+	int rowTextISBN = rowLogISBN; //18
+	int rowTextInfo = rowLogInfo; //19
+	int rowTextPublisher = rowLogPublisher; //20
+	int rowTextEdition = rowLogEdition; //21
+	int rowTextPhysAttrib = rowLogPhysAttrib; //22
+	int rowTextSerialRec = rowLogSerialRec; //23
+	int rowTextSubject = rowLogSubject; //24
+	int rowTextNotes = rowLogNotes; //25
 
 	int colAdd = colTextID;
 	int colBorrow = colAdd + 75;
+	int colDelete = colBorrow + 75;
+	int colMakeMod = colDelete + 75;
+	int rowAdd = rowTextID + 520;
+	int rowBorrow = rowAdd;
+	int rowDelete = rowBorrow;
+	int rowMakeMod = rowDelete;
+
 	int colCBoxPrim = colLogID + 350;
 	int colCBoxSec = colCBoxPrim + 100;
-	int rowAdd = rowTextID + 320;
-	int rowBorrow = rowAdd;
 	int rowCBoxPrim = rowLogID;
 	int rowCBoxSec = rowCBoxPrim;
 	
@@ -204,6 +327,8 @@ public:
 		for (int i = 0; i <= userList.size(); i++) {
 			if (i == userList.size()) {
 				cont = false;
+				MessageBox(m_hwnd, L"A user needs to be signed in to borrow books.", L"Error", MB_OK);
+
 				break;
 			}
 			else if (userList[i].getLogin()) {
@@ -213,13 +338,12 @@ public:
 		}
 
 		if (!cont) {
-			MessageBox(m_hwnd, L"A user needs to be signed in to borrow books.", L"Error", MB_OK);
-
 			return -1;
 		}
 		else {
 			bookList[selection].SetOwnerID(userID);
 			bookList[selection].SetTimeBorrow(7);
+			UpdateBook(selection);
 			MessageBox(m_hwnd, L"You have borrowed this book for 7 days.", L"Success", MB_OK);
 		}
 
@@ -236,10 +360,16 @@ public:
 			else if (name == userList[i].getName()) {
 				if (password == userList[i].getPassword()) {
 					userList[i].login();
-					feedback = userList[i].getID() - 1;
+					feedback = userList[i].getID();
+
+					SendMessage(loginUserBorder, WM_SETTEXT, NULL, (LPARAM)Widen(name).c_str());
+					SendMessage(loginUser, WM_SETTEXT, NULL, (LPARAM)L"");
+					SendMessage(loginPassword, WM_SETTEXT, NULL, (LPARAM)L"");
 
 					if (userList[feedback].getMod()) {
 						ShowWindow(comboBoxPrimary, SW_SHOW);
+						ShowWindow(buttonDelete, SW_SHOW);
+						ShowWindow(buttonAdd, SW_SHOW);
 					}
 
 					return feedback;
@@ -262,15 +392,16 @@ public:
 			else if (userList[i].getLogin() == true) {
 				userList[i].logout();
 				ShowWindow(comboBoxPrimary, SW_HIDE);
+				ShowWindow(comboBoxUser, SW_HIDE);
+				ShowWindow(buttonDelete, SW_HIDE);
+				ShowWindow(buttonAdd, SW_HIDE);
 
-				LogStruct logStruct;
-				logStruct.LogID = logID;
-				logStruct.LogTitle = logTitle;
-				logStruct.LogIsOwned = logIsOwned;
-				logStruct.LogTimeBorrow = logTimeBorrow;
-				logStruct.LogOwnerID = logOwnerID;
+				ShowWindow(comboBoxBook, SW_SHOW);
 
-				UpdateWindowBook(logStruct, comboBoxBook);
+				SendMessage(comboBoxPrimary, CB_SETCURSEL, (WPARAM)0, (LPARAM)0);
+				SendMessage(loginUserBorder, WM_SETTEXT, NULL, (LPARAM)L"Login");
+			
+				UpdateWindowBook();
 
 				return userList[i].getID();
 			}
@@ -293,6 +424,7 @@ public:
 
 		ShowWindow(buttonBorrow, SW_HIDE);
 		ShowWindow(buttonAdd, SW_HIDE);
+		ShowWindow(buttonDelete, SW_HIDE);
 		ShowWindow(comboBoxPrimary, SW_HIDE);
 		ShowWindow(comboBoxBook, SW_HIDE);
 		ShowWindow(comboBoxUser, SW_HIDE);
@@ -302,6 +434,8 @@ public:
 		SendMessage(logIsOwned, WM_SETTEXT, (WPARAM)0, (LPARAM)L"");
 		SendMessage(logTimeBorrow, WM_SETTEXT, (WPARAM)0, (LPARAM)L"");
 		SendMessage(logOwnerID, WM_SETTEXT, (WPARAM)0, (LPARAM)L"");
+		SendMessage(logName, WM_SETTEXT, (WPARAM)0, (LPARAM)L"");
+		SendMessage(logIsMod, WM_SETTEXT, (WPARAM)0, (LPARAM)L"");
 
 		ShowWindow(buttonAddAlt, SW_SHOW);
 		ShowWindow(buttonCancel, SW_SHOW);
@@ -312,14 +446,24 @@ public:
 		ShowWindow(textID, SW_SHOW);
 		ShowWindow(logIsOwned, SW_SHOW);
 		ShowWindow(textIsOwned, SW_SHOW);
-		ShowWindow(logTimeBorrow, SW_SHOW);
-		ShowWindow(textTimeBorrow, SW_SHOW);
-		ShowWindow(logOwnerID, SW_SHOW);
-		ShowWindow(textOwnerID, SW_SHOW);
 
-		ShowWindow(buttonBorrow, SW_SHOW);
-		ShowWindow(buttonAdd, SW_SHOW);
-		ShowWindow(comboBoxPrimary, SW_SHOW);
+		for (int i = 0; i < userList.size(); i++) {
+			if (userList[i].getMod() && userList[i].getLogin()) {
+				ShowWindow(comboBoxPrimary, SW_SHOW);
+				ShowWindow(buttonDelete, SW_SHOW);
+				ShowWindow(buttonAdd, SW_SHOW);
+				ShowWindow(buttonMakeMod, SW_SHOW);
+			}
+		}
+		if (SendMessage(comboBoxPrimary, CB_GETCURSEL, (WPARAM)0, (LPARAM)0) == 0) {
+			ShowWindow(buttonBorrow, SW_SHOW);
+			ShowWindow(logTimeBorrow, SW_SHOW);
+			ShowWindow(textTimeBorrow, SW_SHOW);
+			ShowWindow(logOwnerID, SW_SHOW);
+			ShowWindow(textOwnerID, SW_SHOW);
+		}
+		else {
+		}
 		ShowWindow(comboBoxBook, SW_SHOW);
 		ShowWindow(comboBoxUser, SW_SHOW);
 
@@ -328,13 +472,6 @@ public:
 	}
 
 	void SwitchToBook() {
-		LogStruct logStruct;
-		logStruct.LogID = logID;
-		logStruct.LogTitle = logTitle;
-		logStruct.LogIsOwned = logIsOwned;
-		logStruct.LogTimeBorrow = logTimeBorrow;
-		logStruct.LogOwnerID = logOwnerID;
-
 		ShowWindow(comboBoxBook, SW_SHOW);
 		ShowWindow(buttonBorrow, SW_SHOW);
 		ShowWindow(logIsOwned, SW_SHOW);
@@ -343,19 +480,58 @@ public:
 		ShowWindow(textTimeBorrow, SW_SHOW);
 		ShowWindow(logOwnerID, SW_SHOW);
 		ShowWindow(textOwnerID, SW_SHOW);
+		ShowWindow(logPlaceNumber, SW_SHOW);
+		ShowWindow(textPlaceNumber, SW_SHOW);
+		ShowWindow(logCopy, SW_SHOW);
+		ShowWindow(textCopy, SW_SHOW);
+		ShowWindow(logLibrary, SW_SHOW);
+		ShowWindow(textLibrary, SW_SHOW);
+		ShowWindow(logSection, SW_SHOW);
+		ShowWindow(textSection, SW_SHOW);
+		ShowWindow(logCollection, SW_SHOW);
+		ShowWindow(textCollection, SW_SHOW);
+		ShowWindow(logSubSection, SW_SHOW);
+		ShowWindow(textSubSection, SW_SHOW);
+		ShowWindow(logShape, SW_SHOW);
+		ShowWindow(textShape, SW_SHOW);
+		ShowWindow(logEnviroment, SW_SHOW);
+		ShowWindow(textEnviroment, SW_SHOW);
+		ShowWindow(logLang, SW_SHOW);
+		ShowWindow(textLang, SW_SHOW);
+		ShowWindow(logAuthor, SW_SHOW);
+		ShowWindow(textAuthor, SW_SHOW);
+		ShowWindow(logResponsible, SW_SHOW);
+		ShowWindow(textResponsible, SW_SHOW);
+		ShowWindow(logYear, SW_SHOW);
+		ShowWindow(textYear, SW_SHOW);
+		ShowWindow(logISBN, SW_SHOW);
+		ShowWindow(textISBN, SW_SHOW);
+		ShowWindow(logInfo, SW_SHOW);
+		ShowWindow(textInfo, SW_SHOW);
+		ShowWindow(logPublisher, SW_SHOW);
+		ShowWindow(textPublisher, SW_SHOW);
+		ShowWindow(logEdition, SW_SHOW);
+		ShowWindow(textEdition, SW_SHOW);
+		ShowWindow(logPhysAttrib, SW_SHOW);
+		ShowWindow(textPhysAttrib, SW_SHOW);
+		ShowWindow(logSerialRec, SW_SHOW);
+		ShowWindow(textSerialRec, SW_SHOW);
+		ShowWindow(logSubject, SW_SHOW);
+		ShowWindow(textSubject, SW_SHOW);
+		ShowWindow(logNotes, SW_SHOW);
+		ShowWindow(textNotes, SW_SHOW);
+		ShowWindow(buttonAdd, SW_SHOW);
 
 		ShowWindow(comboBoxUser, SW_HIDE);
-		UpdateWindowBook(logStruct, comboBoxBook);
+		ShowWindow(logName, SW_HIDE);
+		ShowWindow(textName, SW_HIDE);
+		ShowWindow(logIsMod, SW_HIDE);
+		ShowWindow(textIsMod, SW_HIDE);
+		ShowWindow(buttonMakeMod, SW_HIDE);
+		UpdateWindowBook();
 	}
 
 	void SwitchToUser(){
-		LogStruct logStruct;
-		logStruct.LogID = logID;
-		logStruct.LogTitle = logTitle;
-		logStruct.LogIsOwned = logIsOwned;
-		logStruct.LogTimeBorrow = logTimeBorrow;
-		logStruct.LogOwnerID = logOwnerID;
-
 		ShowWindow(comboBoxBook, SW_HIDE);
 		ShowWindow(buttonBorrow, SW_HIDE);
 		ShowWindow(logIsOwned, SW_HIDE);
@@ -364,9 +540,55 @@ public:
 		ShowWindow(textTimeBorrow, SW_HIDE);
 		ShowWindow(logOwnerID, SW_HIDE);
 		ShowWindow(textOwnerID, SW_HIDE);
+		ShowWindow(logPlaceNumber, SW_HIDE);
+		ShowWindow(textPlaceNumber, SW_HIDE);
+		ShowWindow(logCopy, SW_HIDE);
+		ShowWindow(textCopy, SW_HIDE);
+		ShowWindow(logLibrary, SW_HIDE);
+		ShowWindow(textLibrary, SW_HIDE);
+		ShowWindow(logSection, SW_HIDE);
+		ShowWindow(textSection, SW_HIDE);
+		ShowWindow(logCollection, SW_HIDE);
+		ShowWindow(textCollection, SW_HIDE);
+		ShowWindow(logSubSection, SW_HIDE);
+		ShowWindow(textSubSection, SW_HIDE);
+		ShowWindow(logShape, SW_HIDE);
+		ShowWindow(textShape, SW_HIDE);
+		ShowWindow(logEnviroment, SW_HIDE);
+		ShowWindow(textEnviroment, SW_HIDE);
+		ShowWindow(logLang, SW_HIDE);
+		ShowWindow(textLang, SW_HIDE);
+		ShowWindow(logAuthor, SW_HIDE);
+		ShowWindow(textAuthor, SW_HIDE);
+		ShowWindow(logResponsible, SW_HIDE);
+		ShowWindow(textResponsible, SW_HIDE);
+		ShowWindow(logYear, SW_HIDE);
+		ShowWindow(textYear, SW_HIDE);
+		ShowWindow(logISBN, SW_HIDE);
+		ShowWindow(textISBN, SW_HIDE);
+		ShowWindow(logInfo, SW_HIDE);
+		ShowWindow(textInfo, SW_HIDE);
+		ShowWindow(logPublisher, SW_HIDE);
+		ShowWindow(textPublisher, SW_HIDE);
+		ShowWindow(logEdition, SW_HIDE);
+		ShowWindow(textEdition, SW_HIDE);
+		ShowWindow(logPhysAttrib, SW_HIDE);
+		ShowWindow(textPhysAttrib, SW_HIDE);
+		ShowWindow(logSerialRec, SW_HIDE);
+		ShowWindow(textSerialRec, SW_HIDE);
+		ShowWindow(logSubject, SW_HIDE);
+		ShowWindow(textSubject, SW_HIDE);
+		ShowWindow(logNotes, SW_HIDE);
+		ShowWindow(textNotes, SW_HIDE);
+		ShowWindow(buttonAdd, SW_HIDE);
 
 		ShowWindow(comboBoxUser, SW_SHOW);
-		UpdateWindowUser(logStruct, comboBoxUser);
+		ShowWindow(logName, SW_SHOW);
+		ShowWindow(textName, SW_SHOW);
+		ShowWindow(logIsMod, SW_SHOW);
+		ShowWindow(textIsMod, SW_SHOW);
+		ShowWindow(buttonMakeMod, SW_SHOW);
+		UpdateWindowUser();
 	}
 
 	void SwitchLogin(int mode) {
@@ -389,6 +611,7 @@ public:
 			ShowWindow(loginUserBox, SW_HIDE);
 			ShowWindow(loginPasswordBox, SW_HIDE);
 			ShowWindow(buttonLogout, SW_HIDE);
+			SwitchToBook();
 		}
 	}
 
@@ -446,45 +669,381 @@ public:
 		}
 	}
 
+	void UpdateWindowBook() {
+		int selection = SendMessage(comboBoxBook, CB_GETCURSEL, (WPARAM)0, (LPARAM)0);
+
+		if (selection == -1) {
+			SendMessage(logID, WM_SETTEXT, (WPARAM)0, (LPARAM)L"");
+			SendMessage(logName, WM_SETTEXT, (WPARAM)0, (LPARAM)L"");
+			SendMessage(logIsOwned, WM_SETTEXT, (WPARAM)0, (LPARAM)L"");
+			SendMessage(logTimeBorrow, WM_SETTEXT, (WPARAM)0, (LPARAM)L"");
+			SendMessage(logOwnerID, WM_SETTEXT, (WPARAM)0, (LPARAM)L"");
+		}
+		else {
+			int         bookID; //1
+			std::string bookTitle; //2
+			int         bookOwnerID; //3
+			int         bookTimeBorrow; //4
+			std::string bookPlaceNumber; //5
+			std::string bookCopy; //6
+			std::string bookLibrary; //7
+			std::string bookSection; //8
+			std::string bookCollection; //9
+			std::string bookSubsection; //10
+			std::string bookShape; //11
+			std::string bookEnviroment;//12
+			std::string bookLang; //13
+			std::string bookAuthor; //14
+			std::string bookResponsible; //15
+			std::string bookYear; //16
+			std::string bookISBN; //17
+			std::string bookInfo; //18
+			std::string bookPublisher; //19
+			std::string bookEdition; //20
+			std::string bookPhysAttrib; //21
+			std::string bookSerialRec; //22
+			std::string bookSubject; //23
+			std::string bookNotes; //24
+
+			std::wstring logText;
+
+			for (int i = 0; i < bookList.size(); i++) {
+				if (selection == i) {
+					bookID = bookList[i].getID();
+					bookTitle = bookList[i].getTitle();
+					bookOwnerID = bookList[i].getOwnerID();
+					bookTimeBorrow = bookList[i].getTimeBorrow();
+					bookPlaceNumber = bookList[i].GetPlaceNumber();
+					bookCopy = bookList[i].GetCopy();
+					bookLibrary = bookList[i].GetLibrary();
+					bookSection = bookList[i].GetSection();
+					bookCollection = bookList[i].GetCollection();
+					bookSubsection = bookList[i].GetSubSection();
+					bookShape = bookList[i].GetShape();
+					bookEnviroment = bookList[i].GetEnviroment();
+					bookLang = bookList[i].GetLang();
+					bookAuthor = bookList[i].GetAuthor();
+					bookResponsible = bookList[i].GetResponsible();
+					bookYear = bookList[i].GetYear();
+					bookISBN = bookList[i].GetISBN();
+					bookInfo = bookList[i].GetInfo();
+					bookPublisher = bookList[i].GetPublisher();
+					bookEdition = bookList[i].GetEdition();
+					bookPhysAttrib = bookList[i].GetPhysAttrib();
+					bookSerialRec = bookList[i].GetSerialRec();
+					bookSubject = bookList[i].GetSubject();
+					bookNotes = bookList[i].GetNotes();
+
+					logText = Widen(bookID);
+					SendMessage(logID, WM_SETTEXT, (WPARAM)0, (LPARAM)logText.c_str());
+					logText = Widen(bookTitle);
+					SendMessage(logTitle, WM_SETTEXT, (WPARAM)0, (LPARAM)logText.c_str());
+					if (bookOwnerID == 0) {
+						logText = L"No";
+						SendMessage(logIsOwned, WM_SETTEXT, (WPARAM)0, (LPARAM)logText.c_str());
+					}
+					else {
+						logText = L"Yes";
+						SendMessage(logIsOwned, WM_SETTEXT, (WPARAM)0, (LPARAM)logText.c_str());
+					}
+					logText = Widen(bookTimeBorrow);
+					SendMessage(logTimeBorrow, WM_SETTEXT, (WPARAM)0, (LPARAM)logText.c_str());
+					logText = Widen(bookOwnerID);
+					SendMessage(logOwnerID, WM_SETTEXT, (WPARAM)0, (LPARAM)logText.c_str());
+					logText = Widen(bookPlaceNumber);
+					SendMessage(logPlaceNumber, WM_SETTEXT, (WPARAM)0, (LPARAM)logText.c_str());
+					logText = Widen(bookCopy);
+					SendMessage(logCopy, WM_SETTEXT, (WPARAM)0, (LPARAM)logText.c_str());
+					logText = Widen(bookLibrary);
+					SendMessage(logLibrary, WM_SETTEXT, (WPARAM)0, (LPARAM)logText.c_str());
+					logText = Widen(bookSection);
+					SendMessage(logSection, WM_SETTEXT, (WPARAM)0, (LPARAM)logText.c_str());
+					logText = Widen(bookCollection);
+					SendMessage(logCollection, WM_SETTEXT, (WPARAM)0, (LPARAM)logText.c_str());
+					logText = Widen(bookSubsection);
+					SendMessage(logSubSection, WM_SETTEXT, (WPARAM)0, (LPARAM)logText.c_str());
+					logText = Widen(bookShape);
+					SendMessage(logShape, WM_SETTEXT, (WPARAM)0, (LPARAM)logText.c_str());
+					logText = Widen(bookEnviroment);
+					SendMessage(logEnviroment, WM_SETTEXT, (WPARAM)0, (LPARAM)logText.c_str());
+					logText = Widen(bookLang);
+					SendMessage(logLang, WM_SETTEXT, (WPARAM)0, (LPARAM)logText.c_str());
+					logText = Widen(bookAuthor);
+					SendMessage(logAuthor, WM_SETTEXT, (WPARAM)0, (LPARAM)logText.c_str());
+					logText = Widen(bookResponsible);
+					SendMessage(logResponsible, WM_SETTEXT, (WPARAM)0, (LPARAM)logText.c_str());
+					logText = Widen(bookYear);
+					SendMessage(logYear, WM_SETTEXT, (WPARAM)0, (LPARAM)logText.c_str());
+					logText = Widen(bookISBN);
+					SendMessage(logISBN, WM_SETTEXT, (WPARAM)0, (LPARAM)logText.c_str());
+					logText = Widen(bookInfo);
+					SendMessage(logInfo, WM_SETTEXT, (WPARAM)0, (LPARAM)logText.c_str());
+					logText = Widen(bookPublisher);
+					SendMessage(logPublisher, WM_SETTEXT, (WPARAM)0, (LPARAM)logText.c_str());
+					logText = Widen(bookEdition);
+					SendMessage(logEdition, WM_SETTEXT, (WPARAM)0, (LPARAM)logText.c_str());
+					logText = Widen(bookPhysAttrib);
+					SendMessage(logPhysAttrib, WM_SETTEXT, (WPARAM)0, (LPARAM)logText.c_str());
+					logText = Widen(bookSerialRec);
+					SendMessage(logSerialRec, WM_SETTEXT, (WPARAM)0, (LPARAM)logText.c_str());
+					logText = Widen(bookSubject);
+					SendMessage(logSubject, WM_SETTEXT, (WPARAM)0, (LPARAM)logText.c_str());
+					logText = Widen(bookNotes);
+					SendMessage(logNotes, WM_SETTEXT, (WPARAM)0, (LPARAM)logText.c_str());
+
+				}
+			}
+		}
+	}
+
+	void UpdateWindowUser() {
+		int selection = SendMessage(comboBoxUser, CB_GETCURSEL, (WPARAM)0, (LPARAM)0);
+
+		if (selection == -1) {
+			SendMessage(logID, WM_SETTEXT, (WPARAM)0, (LPARAM)L"");
+			SendMessage(logTitle, WM_SETTEXT, (WPARAM)0, (LPARAM)L"");
+			SendMessage(logIsOwned, WM_SETTEXT, (WPARAM)0, (LPARAM)L"");
+			SendMessage(logTimeBorrow, WM_SETTEXT, (WPARAM)0, (LPARAM)L"");
+			SendMessage(logOwnerID, WM_SETTEXT, (WPARAM)0, (LPARAM)L"");
+		}
+		else {
+			int userID;
+			std::string userName;
+			int isMod;
+			std::wstring logText;
+
+			for (int i = 0; i < userList.size(); i++) {
+				if (selection == i) {
+					userID = userList[i].getID();
+					userName = userList[i].getName();
+					isMod = userList[i].getMod();
+
+					logText = Widen(userID);
+					SendMessage(logID, WM_SETTEXT, (WPARAM)0, (LPARAM)logText.c_str());
+
+					logText = Widen(userName);
+					SendMessage(logName, WM_SETTEXT, (WPARAM)0, (LPARAM)logText.c_str());
+
+					logText = Widen(isMod);
+					SendMessage(logIsMod, WM_SETTEXT, (WPARAM)0, (LPARAM)logText.c_str());
+				}
+			}
+		}
+	}
+
+	void AddBook() {
+		std::wstring title;
+		std::wstring placeNumber;
+		std::wstring copy;
+		std::wstring library;
+		std::wstring section;
+		std::wstring collection;
+		std::wstring subsection;
+		std::wstring shape;
+		std::wstring enviroment;
+		std::wstring lang;
+		std::wstring author;
+		std::wstring responsible;
+		std::wstring year;
+		std::wstring isbn;
+		std::wstring info;
+		std::wstring publisher;
+		std::wstring edition;
+		std::wstring physAttrib;
+		std::wstring serialRec;
+		std::wstring subject;
+		std::wstring notes;
+		int id;
+
+		for (int i = 0; i <= bookList.size(); i++) {
+			title.resize(SendMessage(logTitle, WM_GETTEXTLENGTH, (WPARAM)0, (LPARAM)0));
+			SendMessage(logTitle, WM_GETTEXT, (WPARAM)title.size() + 1, (LPARAM)title.c_str());
+			placeNumber.resize(SendMessage(logPlaceNumber, WM_GETTEXTLENGTH, (WPARAM)0, (LPARAM)0));
+			SendMessage(logPlaceNumber, WM_GETTEXT, (WPARAM)placeNumber.size() + 1, (LPARAM)placeNumber.c_str());
+			copy.resize(SendMessage(logCopy, WM_GETTEXTLENGTH, (WPARAM)0, (LPARAM)0));
+			SendMessage(logCopy, WM_GETTEXT, (WPARAM)copy.size() + 1, (LPARAM)copy.c_str());
+			library.resize(SendMessage(logLibrary, WM_GETTEXTLENGTH, (WPARAM)0, (LPARAM)0));
+			SendMessage(logLibrary, WM_GETTEXT, (WPARAM)library.size() + 1, (LPARAM)library.c_str());
+			section.resize(SendMessage(logSection, WM_GETTEXTLENGTH, (WPARAM)0, (LPARAM)0));
+			SendMessage(logSection, WM_GETTEXT, (WPARAM)section.size() + 1, (LPARAM)section.c_str());
+			collection.resize(SendMessage(logCollection, WM_GETTEXTLENGTH, (WPARAM)0, (LPARAM)0));
+			SendMessage(logCollection, WM_GETTEXT, (WPARAM)collection.size() + 1, (LPARAM)collection.c_str());
+			subsection.resize(SendMessage(logSubSection, WM_GETTEXTLENGTH, (WPARAM)0, (LPARAM)0));
+			SendMessage(logSubSection, WM_GETTEXT, (WPARAM)subsection.size() + 1, (LPARAM)subsection.c_str());
+			shape.resize(SendMessage(logShape, WM_GETTEXTLENGTH, (WPARAM)0, (LPARAM)0));
+			SendMessage(logShape, WM_GETTEXT, (WPARAM)shape.size() + 1, (LPARAM)shape.c_str());
+			enviroment.resize(SendMessage(logEnviroment, WM_GETTEXTLENGTH, (WPARAM)0, (LPARAM)0));
+			SendMessage(logEnviroment, WM_GETTEXT, (WPARAM)enviroment.size() + 1, (LPARAM)enviroment.c_str());
+			lang.resize(SendMessage(logLang, WM_GETTEXTLENGTH, (WPARAM)0, (LPARAM)0));
+			SendMessage(logLang, WM_GETTEXT, (WPARAM)lang.size() + 1, (LPARAM)lang.c_str());
+			author.resize(SendMessage(logAuthor, WM_GETTEXTLENGTH, (WPARAM)0, (LPARAM)0));
+			SendMessage(logAuthor, WM_GETTEXT, (WPARAM)author.size() + 1, (LPARAM)author.c_str());
+			responsible.resize(SendMessage(logResponsible, WM_GETTEXTLENGTH, (WPARAM)0, (LPARAM)0));
+			SendMessage(logResponsible, WM_GETTEXT, (WPARAM)responsible.size() + 1, (LPARAM)responsible.c_str());
+			year.resize(SendMessage(logYear, WM_GETTEXTLENGTH, (WPARAM)0, (LPARAM)0));
+			SendMessage(logYear, WM_GETTEXT, (WPARAM)year.size() + 1, (LPARAM)year.c_str());
+			isbn.resize(SendMessage(logISBN, WM_GETTEXTLENGTH, (WPARAM)0, (LPARAM)0));
+			SendMessage(logISBN, WM_GETTEXT, (WPARAM)isbn.size() + 1, (LPARAM)isbn.c_str());
+			info.resize(SendMessage(logInfo, WM_GETTEXTLENGTH, (WPARAM)0, (LPARAM)0));
+			SendMessage(logInfo, WM_GETTEXT, (WPARAM)info.size() + 1, (LPARAM)info.c_str());
+			publisher.resize(SendMessage(logPublisher, WM_GETTEXTLENGTH, (WPARAM)0, (LPARAM)0));
+			SendMessage(logPublisher, WM_GETTEXT, (WPARAM)publisher.size() + 1, (LPARAM)publisher.c_str());
+			edition.resize(SendMessage(logEdition, WM_GETTEXTLENGTH, (WPARAM)0, (LPARAM)0));
+			SendMessage(logEdition, WM_GETTEXT, (WPARAM)edition.size() + 1, (LPARAM)edition.c_str());
+			physAttrib.resize(SendMessage(logPhysAttrib, WM_GETTEXTLENGTH, (WPARAM)0, (LPARAM)0));
+			SendMessage(logPhysAttrib, WM_GETTEXT, (WPARAM)physAttrib.size() + 1, (LPARAM)physAttrib.c_str());
+			serialRec.resize(SendMessage(logSerialRec, WM_GETTEXTLENGTH, (WPARAM)0, (LPARAM)0));
+			SendMessage(logSerialRec, WM_GETTEXT, (WPARAM)serialRec.size() + 1, (LPARAM)serialRec.c_str());
+			subject.resize(SendMessage(logSubject, WM_GETTEXTLENGTH, (WPARAM)0, (LPARAM)0));
+			SendMessage(logSubject, WM_GETTEXT, (WPARAM)subject.size() + 1, (LPARAM)subject.c_str());
+			notes.resize(SendMessage(logNotes, WM_GETTEXTLENGTH, (WPARAM)0, (LPARAM)0));
+			SendMessage(logNotes, WM_GETTEXT, (WPARAM)notes.size() + 1, (LPARAM)notes.c_str());
+
+			if (i == bookList.size()) {
+				if (bookList.empty()) {
+					id = 0;
+				}
+				else {
+					id = bookList.size() + 1;
+				}
+				ClassBook(
+					id,
+					Narrowen(title),
+					0,
+					0,
+					Narrowen(placeNumber),
+					Narrowen(copy),
+					Narrowen(library),
+					Narrowen(section),
+					Narrowen(collection),
+					Narrowen(subsection),
+					Narrowen(shape),
+					Narrowen(enviroment),
+					Narrowen(lang),
+					Narrowen(author),
+					Narrowen(responsible),
+					Narrowen(year),
+					Narrowen(isbn),
+					Narrowen(info),
+					Narrowen(publisher),
+					Narrowen(edition),
+					Narrowen(physAttrib),
+					Narrowen(serialRec),
+					Narrowen(subject),
+					Narrowen(notes)
+				);
+				saveDatabase();
+				readDatabase();
+				InsertToCBoxBook();
+
+				MessageBox(m_hwnd, L"Addition successful.", L"Success", MB_OK);
+				break;
+			}
+			else if (title.empty()) {
+				MessageBox(m_hwnd, L"Books must have a name.", L"Error", MB_OK);
+				break;
+			}
+			else if (Narrowen(title) == "Start book") {
+				MessageBox(m_hwnd, L"A book's name cannot be \"Start book\".", L"Error", MB_OK);
+				break;
+			}
+			else if (Narrowen(title) == "End book") {
+				MessageBox(m_hwnd, L"A book's name cannot be \"End book\".", L"Error", MB_OK);
+				break;
+			}
+			else if (Narrowen(title) == bookList[i].getTitle()) {
+				MessageBox(m_hwnd, L"A book with this title already exists.", L"Error", MB_OK);
+				break;
+			}
+		}
+	}
+
 	PCWSTR ClassName() const { return L"Main Window"; }
 	LRESULT HandleMessage(UINT uMsg, WPARAM wparam, LPARAM lparam) {
 		switch (uMsg) {
 
-		case WM_CREATE:
-			loginUserBorder  = CreateWindow(WC_BUTTON, L"Login", WS_VISIBLE | WS_CHILD | BS_GROUPBOX, colLoginBorder, rowLoginBorder, 120, 100, m_hwnd, NULL, NULL, NULL);
-			loginUserBox     = CreateWindow(WC_STATIC, L"",              WS_CHILD | WS_BORDER, colLoginUser, rowLoginUser, 80, 20, m_hwnd, NULL, NULL, NULL);
-			loginPasswordBox = CreateWindow(WC_STATIC, L"",              WS_CHILD | WS_BORDER, colLoginPassword, rowLoginPassword, 80, 20, m_hwnd, NULL, NULL, NULL);
-			loginUser        = CreateWindow(WC_EDIT,   L"", WS_VISIBLE | WS_CHILD | WS_BORDER, colLoginUser, rowLoginUser, 80, 20, m_hwnd, NULL, NULL, NULL);
-			loginPassword    = CreateWindow(WC_EDIT,   L"", WS_VISIBLE | WS_CHILD | WS_BORDER, colLoginPassword, rowLoginPassword, 80, 20, m_hwnd, NULL, NULL, NULL);
+		case WM_CREATE: {
+			loginUserBorder  = CreateWindow(WC_BUTTON, L"Login",    WS_VISIBLE | WS_CHILD | BS_GROUPBOX, colLoginBorder, rowLoginBorder, 120, 100, m_hwnd, NULL, NULL, NULL);
+			loginUserBox     = CreateWindow(WC_STATIC, L"",         WS_CHILD | WS_BORDER, colLoginUser, rowLoginUser, 80, 20, m_hwnd, NULL, NULL, NULL);
+			loginPasswordBox = CreateWindow(WC_STATIC, L"",         WS_CHILD | WS_BORDER, colLoginPassword, rowLoginPassword, 80, 20, m_hwnd, NULL, NULL, NULL);
+			loginUser        = CreateWindow(WC_EDIT,   L"",         WS_VISIBLE | WS_CHILD | WS_BORDER | ES_AUTOHSCROLL, colLoginUser, rowLoginUser, 80, 20, m_hwnd, NULL, NULL, NULL);
+			loginPassword    = CreateWindow(WC_EDIT,   L"",         WS_VISIBLE | WS_CHILD | WS_BORDER | ES_AUTOHSCROLL, colLoginPassword, rowLoginPassword, 80, 20, m_hwnd, NULL, NULL, NULL);
 			buttonLogin      = CreateWindow(WC_BUTTON, L"Login",    WS_VISIBLE | WS_CHILD | WS_BORDER, colButtonLogin, rowButtonLogin, 50, 20, m_hwnd, NULL, NULL, NULL);
 			buttonRegister   = CreateWindow(WC_BUTTON, L"Register", WS_VISIBLE | WS_CHILD | WS_BORDER, colButtonRegister, rowButtonRegister, 60, 20, m_hwnd, NULL, NULL, NULL);
 			buttonLogout     = CreateWindow(WC_BUTTON, L"Logout",                WS_CHILD | WS_BORDER, colButtonLogout, rowButtonLogout, 50, 20, m_hwnd, NULL, NULL, NULL);
-			
-			logID         = CreateWindow(WC_EDIT, L"", WS_VISIBLE | WS_CHILD | WS_BORDER | ES_AUTOHSCROLL, colLogID, rowLogID, 150, 20, m_hwnd, (HMENU)1, NULL, NULL);
-			logTitle      = CreateWindow(WC_EDIT, L"", WS_VISIBLE | WS_CHILD | WS_BORDER | ES_AUTOHSCROLL, colLogTitle, rowLogTitle, 150, 20, m_hwnd, (HMENU)1, NULL, NULL);
-			logIsOwned    = CreateWindow(WC_EDIT, L"", WS_VISIBLE | WS_CHILD | WS_BORDER | ES_AUTOHSCROLL, colLogIsOwned, rowLogIsOwned, 150, 20, m_hwnd, (HMENU)1, NULL, NULL);
-			logTimeBorrow = CreateWindow(WC_EDIT, L"", WS_VISIBLE | WS_CHILD | WS_BORDER | ES_AUTOHSCROLL, colLogTimeBorrow, rowLogTimeBorrow, 150, 20, m_hwnd, (HMENU)1, NULL, NULL);
-			logOwnerID    = CreateWindow(WC_EDIT, L"", WS_VISIBLE | WS_CHILD | WS_BORDER | ES_AUTOHSCROLL, colLogOwnerID, rowLogOwnerID, 150, 20, m_hwnd, (HMENU)1, NULL, NULL);
-			
-			textID         = CreateWindow(WC_STATIC, L"ID:",          WS_VISIBLE | WS_CHILD | WS_BORDER, colTextID, rowTextID, 90, 20, m_hwnd, (HMENU)1, NULL, NULL);
-			textTitle      = CreateWindow(WC_STATIC, L"Title:",       WS_VISIBLE | WS_CHILD | WS_BORDER, colTextTitle, rowTextTitle, 90, 20, m_hwnd, (HMENU)1, NULL, NULL);
-			textIsOwned    = CreateWindow(WC_STATIC, L"Is Owned:",    WS_VISIBLE | WS_CHILD | WS_BORDER, colTextIsOwned, rowTextIsOwned, 90, 20, m_hwnd, (HMENU)1, NULL, NULL);
-			textTimeBorrow = CreateWindow(WC_STATIC, L"Borrow Time:", WS_VISIBLE | WS_CHILD | WS_BORDER, colTextTimeBorrow, rowTextTimeBorrow, 90, 20, m_hwnd, (HMENU)1, NULL, NULL);
-			textOwnerID    = CreateWindow(WC_STATIC, L"Owner ID:",    WS_VISIBLE | WS_CHILD | WS_BORDER, colTextOwnerID, rowTextOwnerID, 90, 20, m_hwnd, (HMENU)1, NULL, NULL);
 
-			buttonBorrow    = CreateWindow(WC_BUTTON  , L"Borrow", WS_VISIBLE | WS_CHILD | WS_BORDER     , colBorrow, rowBorrow, 60, 20, m_hwnd, (HMENU)2, NULL, NULL);
-			buttonAdd       = CreateWindow(WC_BUTTON  , L"Add" , WS_VISIBLE | WS_CHILD | WS_BORDER     , colAdd, rowAdd, 60, 20, m_hwnd, (HMENU)6, NULL, NULL);
-			comboBoxPrimary = CreateWindow(WC_COMBOBOX, L""  ,                WS_CHILD | WS_OVERLAPPED | CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | CBS_HASSTRINGS, colCBoxPrim, rowCBoxPrim, 80, 500, m_hwnd, (HMENU)3, NULL, NULL);
-			comboBoxBook    = CreateWindow(WC_COMBOBOX, L""  ,   WS_VISIBLE | WS_CHILD | WS_OVERLAPPED | CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | CBS_HASSTRINGS, colCBoxSec , rowCBoxSec, 100, 500, m_hwnd, (HMENU)4, NULL, NULL);
-			comboBoxUser    = CreateWindow(WC_COMBOBOX, L""  ,                WS_CHILD | WS_OVERLAPPED | CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | CBS_HASSTRINGS, colCBoxSec , rowCBoxSec, 100, 500, m_hwnd, (HMENU)5, NULL, NULL);
-			
-			buttonCancel = CreateWindow(WC_BUTTON  , L"Cancel" , WS_CHILD | WS_BORDER , colCancel, rowCancel, 60, 20, m_hwnd, (HMENU)9, NULL, NULL);
-			buttonAddAlt = CreateWindow(WC_BUTTON  , L"Add"    , WS_CHILD | WS_BORDER , colAddAlt, rowAddAlt, 60, 20, m_hwnd, (HMENU)8, NULL, NULL);
-			
+			logID          = CreateWindow(WC_EDIT, L"", WS_VISIBLE | WS_CHILD | WS_BORDER | ES_AUTOHSCROLL, colLogID, rowLogID, 150, 20, m_hwnd, NULL, NULL, NULL); //1
+			logTitle       = CreateWindow(WC_EDIT, L"", WS_VISIBLE | WS_CHILD | WS_BORDER | ES_AUTOHSCROLL, colLogTitle, rowLogTitle, 150, 20, m_hwnd, NULL, NULL, NULL); //2
+			logIsOwned     = CreateWindow(WC_EDIT, L"", WS_VISIBLE | WS_CHILD | WS_BORDER | ES_AUTOHSCROLL, colLogIsOwned, rowLogIsOwned, 150, 20, m_hwnd, NULL, NULL, NULL); //3
+			logTimeBorrow  = CreateWindow(WC_EDIT, L"", WS_VISIBLE | WS_CHILD | WS_BORDER | ES_AUTOHSCROLL, colLogTimeBorrow, rowLogTimeBorrow, 150, 20, m_hwnd, NULL, NULL, NULL); //4
+			logOwnerID     = CreateWindow(WC_EDIT, L"", WS_VISIBLE | WS_CHILD | WS_BORDER | ES_AUTOHSCROLL, colLogOwnerID, rowLogOwnerID, 150, 20, m_hwnd, NULL, NULL, NULL); //5
+			logPlaceNumber = CreateWindow(WC_EDIT, L"", WS_VISIBLE | WS_CHILD | WS_BORDER | ES_AUTOHSCROLL, colLogPlaceNumber, rowLogPlaceNumber, 150, 20, m_hwnd, NULL, NULL, NULL); //7
+			logCopy        = CreateWindow(WC_EDIT, L"", WS_VISIBLE | WS_CHILD | WS_BORDER | ES_AUTOHSCROLL, colLogCopy, rowLogCopy, 150, 20, m_hwnd, NULL, NULL, NULL); //8
+			logLibrary     = CreateWindow(WC_EDIT, L"", WS_VISIBLE | WS_CHILD | WS_BORDER | ES_AUTOHSCROLL, colLogLibrary, rowLogLibrary, 150, 20, m_hwnd, NULL, NULL, NULL); //9
+			logSection     = CreateWindow(WC_EDIT, L"", WS_VISIBLE | WS_CHILD | WS_BORDER | ES_AUTOHSCROLL, colLogSection, rowLogSection, 150, 20, m_hwnd, NULL, NULL, NULL); //10
+			logCollection  = CreateWindow(WC_EDIT, L"", WS_VISIBLE | WS_CHILD | WS_BORDER | ES_AUTOHSCROLL, colLogCollection, rowLogCollection, 150, 20, m_hwnd, NULL, NULL, NULL); //11
+			logSubSection  = CreateWindow(WC_EDIT, L"", WS_VISIBLE | WS_CHILD | WS_BORDER | ES_AUTOHSCROLL, colLogSubSection, rowLogSubSection, 150, 20, m_hwnd, NULL, NULL, NULL); //12
+			logShape       = CreateWindow(WC_EDIT, L"", WS_VISIBLE | WS_CHILD | WS_BORDER | ES_AUTOHSCROLL, colLogShape, rowLogShape, 150, 20, m_hwnd, NULL, NULL, NULL); //13
+			logEnviroment  = CreateWindow(WC_EDIT, L"", WS_VISIBLE | WS_CHILD | WS_BORDER | ES_AUTOHSCROLL, colLogEnviroment, rowLogEnviroment, 150, 20, m_hwnd, NULL, NULL, NULL); //14
+			logLang        = CreateWindow(WC_EDIT, L"", WS_VISIBLE | WS_CHILD | WS_BORDER | ES_AUTOHSCROLL, colLogLang, rowLogLang, 150, 20, m_hwnd, NULL, NULL, NULL); //15
+			logAuthor      = CreateWindow(WC_EDIT, L"", WS_VISIBLE | WS_CHILD | WS_BORDER | ES_AUTOHSCROLL, colLogAuthor, rowLogAuthor, 150, 20, m_hwnd, NULL, NULL, NULL); //16
+			logResponsible = CreateWindow(WC_EDIT, L"", WS_VISIBLE | WS_CHILD | WS_BORDER | ES_AUTOHSCROLL, colLogResponsible, rowLogResponsible, 150, 20, m_hwnd, NULL, NULL, NULL); //17
+			logYear        = CreateWindow(WC_EDIT, L"", WS_VISIBLE | WS_CHILD | WS_BORDER | ES_AUTOHSCROLL, colLogYear, rowLogYear, 150, 20, m_hwnd, NULL, NULL, NULL); //18
+			logISBN        = CreateWindow(WC_EDIT, L"", WS_VISIBLE | WS_CHILD | WS_BORDER | ES_AUTOHSCROLL, colLogISBN, rowLogISBN, 150, 20, m_hwnd, NULL, NULL, NULL); //19
+			logInfo        = CreateWindow(WC_EDIT, L"", WS_VISIBLE | WS_CHILD | WS_BORDER | ES_AUTOHSCROLL, colLogInfo, rowLogInfo, 150, 20, m_hwnd, NULL, NULL, NULL); //20
+			logPublisher   = CreateWindow(WC_EDIT, L"", WS_VISIBLE | WS_CHILD | WS_BORDER | ES_AUTOHSCROLL, colLogPublisher, rowLogPublisher, 150, 20, m_hwnd, NULL, NULL, NULL); //21
+			logEdition     = CreateWindow(WC_EDIT, L"", WS_VISIBLE | WS_CHILD | WS_BORDER | ES_AUTOHSCROLL, colLogEdition, rowLogEdition, 150, 20, m_hwnd, NULL, NULL, NULL); //22
+			logPhysAttrib  = CreateWindow(WC_EDIT, L"", WS_VISIBLE | WS_CHILD | WS_BORDER | ES_AUTOHSCROLL, colLogPhysAttrib, rowLogPhysAttrib, 150, 20, m_hwnd, NULL, NULL, NULL); //23
+			logSerialRec   = CreateWindow(WC_EDIT, L"", WS_VISIBLE | WS_CHILD | WS_BORDER | ES_AUTOHSCROLL, colLogSerialRec, rowLogSerialRec, 150, 20, m_hwnd, NULL, NULL, NULL); //24
+			logSubject     = CreateWindow(WC_EDIT, L"", WS_VISIBLE | WS_CHILD | WS_BORDER | ES_AUTOHSCROLL, colLogSubject, rowLogSubject, 150, 20, m_hwnd, NULL, NULL, NULL); //25
+			logNotes       = CreateWindow(WC_EDIT, L"", WS_VISIBLE | WS_CHILD | WS_BORDER | ES_AUTOHSCROLL, colLogNotes, rowLogNotes, 150, 20, m_hwnd, NULL, NULL, NULL); //26
+			logName        = CreateWindow(WC_EDIT, L"",              WS_CHILD | WS_BORDER | ES_AUTOHSCROLL, colLogTitle, rowLogTitle, 150, 20, m_hwnd, NULL, NULL, NULL); //27
+			logIsMod       = CreateWindow(WC_EDIT, L"",              WS_CHILD | WS_BORDER | ES_AUTOHSCROLL, colLogIsOwned, rowLogIsOwned, 150, 20, m_hwnd, NULL, NULL, NULL); //28
+
+			textID          = CreateWindow(WC_STATIC, L"ID",              WS_VISIBLE | WS_CHILD | WS_BORDER, colTextID, rowTextID, 90, 20, m_hwnd, NULL, NULL, NULL); //1
+			textTitle       = CreateWindow(WC_STATIC, L"Title",           WS_VISIBLE | WS_CHILD | WS_BORDER, colTextTitle, rowTextTitle, 90, 20, m_hwnd, NULL, NULL, NULL); //2
+			textIsOwned     = CreateWindow(WC_STATIC, L"Is Owned",        WS_VISIBLE | WS_CHILD | WS_BORDER, colTextIsOwned, rowTextIsOwned, 90, 20, m_hwnd, NULL, NULL, NULL); //3
+			textTimeBorrow  = CreateWindow(WC_STATIC, L"Time Borrow",     WS_VISIBLE | WS_CHILD | WS_BORDER, colTextTimeBorrow, rowTextTimeBorrow, 90, 20, m_hwnd, NULL, NULL, NULL); //4
+			textOwnerID     = CreateWindow(WC_STATIC, L"Owner ID",        WS_VISIBLE | WS_CHILD | WS_BORDER, colTextOwnerID, rowTextOwnerID, 90, 20, m_hwnd, NULL, NULL, NULL); //5
+			textPlaceNumber = CreateWindow(WC_STATIC, L"Place Number",    WS_VISIBLE | WS_CHILD | WS_BORDER, colTextPlaceNumber, rowTextPlaceNumber, 90, 20, m_hwnd, NULL, NULL, NULL); //7
+			textCopy        = CreateWindow(WC_STATIC, L"Copy",            WS_VISIBLE | WS_CHILD | WS_BORDER, colTextCopy, rowTextCopy, 90, 20, m_hwnd, NULL, NULL, NULL); //8
+			textLibrary     = CreateWindow(WC_STATIC, L"Library",         WS_VISIBLE | WS_CHILD | WS_BORDER, colTextLibrary, rowTextLibrary, 90, 20, m_hwnd, NULL, NULL, NULL); //9
+			textSection     = CreateWindow(WC_STATIC, L"Section",         WS_VISIBLE | WS_CHILD | WS_BORDER, colTextSection, rowTextSection, 90, 20, m_hwnd, NULL, NULL, NULL); //10
+			textCollection  = CreateWindow(WC_STATIC, L"Collection",      WS_VISIBLE | WS_CHILD | WS_BORDER, colTextCollection, rowTextCollection, 90, 20, m_hwnd, NULL, NULL, NULL); //11
+			textSubSection  = CreateWindow(WC_STATIC, L"Subsection",      WS_VISIBLE | WS_CHILD | WS_BORDER, colTextSubSection, rowTextSubSection, 90, 20, m_hwnd, NULL, NULL, NULL); //12
+			textShape       = CreateWindow(WC_STATIC, L"Shape",           WS_VISIBLE | WS_CHILD | WS_BORDER, colTextShape, rowTextShape, 90, 20, m_hwnd, NULL, NULL, NULL); //13
+			textEnviroment  = CreateWindow(WC_STATIC, L"Enviroment",      WS_VISIBLE | WS_CHILD | WS_BORDER, colTextEnviroment, rowTextEnviroment, 90, 20, m_hwnd, NULL, NULL, NULL); //14
+			textLang        = CreateWindow(WC_STATIC, L"Language",        WS_VISIBLE | WS_CHILD | WS_BORDER, colTextLang, rowTextLang, 90, 20, m_hwnd, NULL, NULL, NULL); //15
+			textAuthor      = CreateWindow(WC_STATIC, L"Author",          WS_VISIBLE | WS_CHILD | WS_BORDER, colTextAuthor, rowTextAuthor, 90, 20, m_hwnd, NULL, NULL, NULL); //16
+			textResponsible = CreateWindow(WC_STATIC, L"Responsible",     WS_VISIBLE | WS_CHILD | WS_BORDER, colTextResponsible, rowTextResponsible, 90, 20, m_hwnd, NULL, NULL, NULL); //17
+			textYear        = CreateWindow(WC_STATIC, L"Date",            WS_VISIBLE | WS_CHILD | WS_BORDER, colTextYear, rowTextYear, 90, 20, m_hwnd, NULL, NULL, NULL); //18
+			textISBN        = CreateWindow(WC_STATIC, L"ISBN",            WS_VISIBLE | WS_CHILD | WS_BORDER, colTextISBN, rowTextISBN, 90, 20, m_hwnd, NULL, NULL, NULL); //19
+			textInfo        = CreateWindow(WC_STATIC, L"Publishing Info", WS_VISIBLE | WS_CHILD | WS_BORDER, colTextInfo, rowTextInfo, 90, 20, m_hwnd, NULL, NULL, NULL); //20
+			textPublisher   = CreateWindow(WC_STATIC, L"Publisher",       WS_VISIBLE | WS_CHILD | WS_BORDER, colTextPublisher, rowTextPublisher, 90, 20, m_hwnd, NULL, NULL, NULL); //21
+			textEdition     = CreateWindow(WC_STATIC, L"Edition",         WS_VISIBLE | WS_CHILD | WS_BORDER, colTextEdition, rowTextEdition, 90, 20, m_hwnd, NULL, NULL, NULL); //22
+			textPhysAttrib  = CreateWindow(WC_STATIC, L"Attributes",      WS_VISIBLE | WS_CHILD | WS_BORDER, colTextPhysAttrib, rowTextPhysAttrib, 90, 20, m_hwnd, NULL, NULL, NULL); //23
+			textSerialRec   = CreateWindow(WC_STATIC, L"Serial Record",   WS_VISIBLE | WS_CHILD | WS_BORDER, colTextSerialRec, rowTextSerialRec, 90, 20, m_hwnd, NULL, NULL, NULL); //24
+			textSubject     = CreateWindow(WC_STATIC, L"Subjects",        WS_VISIBLE | WS_CHILD | WS_BORDER, colTextSubject, rowTextSubject, 90, 20, m_hwnd, NULL, NULL, NULL); //25
+			textNotes       = CreateWindow(WC_STATIC, L"Notes",           WS_VISIBLE | WS_CHILD | WS_BORDER, colTextNotes, rowTextNotes, 90, 20, m_hwnd, NULL, NULL, NULL); //26
+			textName        = CreateWindow(WC_STATIC, L"Name",                         WS_CHILD | WS_BORDER, colTextTitle, rowTextTitle, 90, 20, m_hwnd, NULL, NULL, NULL); //27
+			textIsMod       = CreateWindow(WC_STATIC, L"Is Mod",                       WS_CHILD | WS_BORDER, colTextIsOwned, rowTextIsOwned, 90, 20, m_hwnd, NULL, NULL, NULL); //28
+
+			buttonBorrow  = CreateWindow(WC_BUTTON, L"Borrow", WS_VISIBLE | WS_CHILD | WS_BORDER, colBorrow, rowBorrow, 60, 20, m_hwnd, NULL, NULL, NULL);
+			buttonAdd     = CreateWindow(WC_BUTTON, L"Add",                 WS_CHILD | WS_BORDER, colAdd, rowAdd, 60, 20, m_hwnd, NULL, NULL, NULL);
+			buttonDelete  = CreateWindow(WC_BUTTON, L"Delete",              WS_CHILD | WS_BORDER, colDelete, rowDelete, 60, 20, m_hwnd, NULL, NULL, NULL);
+			buttonMakeMod = CreateWindow(WC_BUTTON, L"Make Mod",            WS_CHILD | WS_BORDER, colMakeMod, rowMakeMod, 80, 20, m_hwnd, NULL, NULL, NULL);
+
+			comboBoxPrimary = CreateWindow(WC_COMBOBOX, L"",              WS_CHILD | WS_OVERLAPPED | CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | CBS_HASSTRINGS, colCBoxPrim, rowCBoxPrim, 80, 500, m_hwnd, NULL, NULL, NULL);
+			comboBoxBook    = CreateWindow(WC_COMBOBOX, L"", WS_VISIBLE | WS_CHILD | WS_OVERLAPPED | CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | CBS_HASSTRINGS, colCBoxSec, rowCBoxSec, 100, 500, m_hwnd, NULL, NULL, NULL);
+			comboBoxUser    = CreateWindow(WC_COMBOBOX, L"",              WS_CHILD | WS_OVERLAPPED | CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | CBS_HASSTRINGS, colCBoxSec, rowCBoxSec, 100, 500, m_hwnd, NULL, NULL, NULL);
+
+			buttonCancel = CreateWindow(WC_BUTTON, L"Cancel", WS_CHILD | WS_BORDER, colCancel, rowCancel, 60, 20, m_hwnd, NULL, NULL, NULL);
+			buttonAddAlt = CreateWindow(WC_BUTTON, L"Add",    WS_CHILD | WS_BORDER, colAddAlt, rowAddAlt, 60, 20, m_hwnd, NULL, NULL, NULL);
+
 			SendMessage(comboBoxPrimary, CB_ADDSTRING, (WPARAM)0, (LPARAM)L"Books");
 			SendMessage(comboBoxPrimary, CB_ADDSTRING, (WPARAM)0, (LPARAM)L"Users");
 			SendMessage(comboBoxPrimary, CB_SETCURSEL, (WPARAM)0, (LPARAM)0);
-			
+
 			if (!bookList.empty()) {
 				InsertToCBoxBook();
 				SendMessage(comboBoxBook, CB_SETCURSEL, (WPARAM)0, (LPARAM)0);
@@ -492,7 +1051,7 @@ public:
 			else {
 				SendMessage(comboBoxBook, CB_SETCURSEL, (WPARAM)-1, (LPARAM)0);
 			}
-			
+
 			if (!userList.empty()) {
 				InsertToCBoxUser();
 				SendMessage(comboBoxUser, CB_SETCURSEL, (WPARAM)0, (LPARAM)0);
@@ -500,7 +1059,7 @@ public:
 			else {
 				SendMessage(comboBoxUser, CB_SETCURSEL, (WPARAM)-1, (LPARAM)0);
 			}
-
+		}
 			return 0;
 
 		case WM_COMMAND: {
@@ -509,15 +1068,8 @@ public:
 					if (BorrowBook() != -1) {
 						saveDatabase();
 						readDatabase();
-
-						LogStruct logStruct;
-						logStruct.LogID = logID;
-						logStruct.LogTitle = logTitle;
-						logStruct.LogIsOwned = logIsOwned;
-						logStruct.LogTimeBorrow = logTimeBorrow;
-						logStruct.LogOwnerID = logOwnerID;
-
-						UpdateWindowBook(logStruct, comboBoxBook);
+						
+						UpdateWindowBook();
 					}
 				}
 				else if (lparam == LPARAM(buttonAdd)) {
@@ -526,41 +1078,10 @@ public:
 				else if (lparam == LPARAM(buttonCancel)) {
 					SwitchToMain();
 				}
-				else if (lparam == LPARAM(buttonAddAlt)){
+				else if (lparam == LPARAM(buttonAddAlt)) {
 					int confirm = MessageBox(m_hwnd, L"Do you want add a book with these attributes?", L"Confirm", MB_OKCANCEL);
 					if (confirm == IDOK) {
-						std::wstring title;
-
-						for (int i = 0; i <= bookList.size(); i++) {
-							title.resize(SendMessage(logTitle, WM_GETTEXTLENGTH, (WPARAM)0, (LPARAM)0));
-							SendMessage(logTitle, WM_GETTEXT, (WPARAM)title.size() + 1, (LPARAM)title.c_str());
-
-							if (i == bookList.size()) {
-								ClassBook(bookList.size() + 1, Narrowen(title));
-								saveDatabase();
-								readDatabase();
-								InsertToCBoxBook();
-
-								MessageBox(m_hwnd, L"Addition successful.", L"Success", MB_OK);
-								break;
-							}
-							else if (title.empty()) {
-								MessageBox(m_hwnd, L"Books must have a name.", L"Error", MB_OK);
-								break;
-							}
-							else if (Narrowen(title) == "Start book") {
-								MessageBox(m_hwnd, L"A book's name cannot be \"Start book\".", L"Error", MB_OK);
-								break;
-							}
-							else if (Narrowen(title) == "End book") {
-								MessageBox(m_hwnd, L"A book's name cannot be \"End book\".", L"Error", MB_OK);
-								break;
-							}
-							else if (Narrowen(title) == bookList[i].getTitle()) {
-								MessageBox(m_hwnd, L"A book with this title already exists.", L"Error", MB_OK);
-								break;
-							}
-						}
+						AddBook();
 					}
 				}
 				else if (lparam == LPARAM(buttonLogin)) {
@@ -580,16 +1101,12 @@ public:
 					}
 					else {
 						SwitchLogin(1);
-						SendMessage(loginUserBorder, WM_SETTEXT, NULL, (LPARAM)name.c_str());
-						SendMessage(loginUser, WM_SETTEXT, NULL, (LPARAM)L"");
-						SendMessage(loginPassword, WM_SETTEXT, NULL, (LPARAM)L"");
 
 						MessageBox(m_hwnd, L"Login successful.", L"Success", MB_OK);
 					}
 				}
 				else if (lparam == LPARAM(buttonLogout)) {
 						SwitchLogin(0);
-						SendMessage(loginUserBorder, WM_SETTEXT, NULL, (LPARAM)L"Login");
 						Logout();
 						MessageBox(m_hwnd, L"Logout successful.", L"Success", MB_OK);
 				}
@@ -606,16 +1123,13 @@ public:
 							SendMessage(loginPassword, WM_GETTEXT, (WPARAM)password.size() + 1, (LPARAM)password.c_str());
 
 							if (i == userList.size()) {
-								ClassUser(userList.size() + 1, Narrowen(name), Narrowen(password), 0);
+								ClassUser(userList.size(), Narrowen(name), Narrowen(password), 0);
 								saveDatabase();
 								readDatabase();
 								InsertToCBoxUser();
 
 								Login(Narrowen(name), Narrowen(password));
 								SwitchLogin(1);
-								SendMessage(loginUserBorder, WM_SETTEXT, NULL, (LPARAM)L"Registered");
-								SendMessage(loginUser, WM_SETTEXT, NULL, (LPARAM)L"");
-								SendMessage(loginPassword, WM_SETTEXT, NULL, (LPARAM)L"");
 								MessageBox(m_hwnd, L"Register successful.", L"Success", MB_OK);
 								break;
 							}
@@ -638,6 +1152,98 @@ public:
 						}
 					}
 				}
+				else if (lparam == LPARAM(buttonDelete)) {
+					int bookID = SendMessage(comboBoxBook, CB_GETCURSEL, (WPARAM)0, (LPARAM)0);
+					int userID = SendMessage(comboBoxUser, CB_GETCURSEL, (WPARAM)0, (LPARAM)0);
+					int selection = SendMessage(comboBoxPrimary, CB_GETCURSEL, (WPARAM)0, (LPARAM)0);
+
+					if (selection == 0) {
+						if (MessageBox(m_hwnd, L"Are you sure you want to delete this book?", L"Confirm", MB_OKCANCEL) == IDOK) {
+							for (int i = 0; i <= bookList.size(); i++)
+							{
+								if (i == bookList.size()) {
+									MessageBox(m_hwnd, L"Could not find this book.", L"Error", MB_OK);
+									break;
+								}
+								if (i == bookID) {
+									DeleteBook(bookID);
+									saveDatabase();
+									readDatabase();
+									int selection = SendMessage(comboBoxBook, CB_GETCURSEL, (WPARAM)0, (LPARAM)0);
+									SendMessage(comboBoxBook, CB_RESETCONTENT, (WPARAM)0, (LPARAM)0);
+									if (selection >= bookList.size() - 1) {
+										SendMessage(comboBoxBook, CB_SETCURSEL, (WPARAM)0, (LPARAM)0);
+									}
+									else {
+										SendMessage(comboBoxBook, CB_SETCURSEL, (WPARAM)selection, (LPARAM)0);
+									}
+									InsertToCBoxBook();
+									UpdateWindowBook();
+									break;
+								}
+							}
+						}
+					}
+					else {
+						if (userList.size() == 0) {
+							MessageBox(m_hwnd, L"You cannot delete the only remaining user.", L"Error", MB_OK);
+						}
+						else {
+							if (MessageBox(m_hwnd, L"Are you sure you want to delete this user?", L"Confirm", MB_OKCANCEL) == IDOK) {
+								for (int i = 0; i <= userList.size(); i++) {
+									if (i == userList.size()) {
+										MessageBox(m_hwnd, L"Could not find this user.", L"Error", MB_OK);
+										break;
+									}
+									if (i == userID) {
+										if (userList[i].getLogin()) {
+											SwitchLogin(0);
+											Logout();
+										}
+										DeleteUser(userID);
+										saveDatabase();
+										readDatabase();
+										int selection = SendMessage(comboBoxUser, CB_GETCURSEL, (WPARAM)0, (LPARAM)0);
+										SendMessage(comboBoxUser, CB_RESETCONTENT, (WPARAM)0, (LPARAM)0);
+										if (selection >= userList.size() - 1) { 
+											SendMessage(comboBoxUser, CB_SETCURSEL, (WPARAM)0, (LPARAM)0);
+										}
+										else {
+											SendMessage(comboBoxUser, CB_SETCURSEL, (WPARAM)selection, (LPARAM)0);
+										}
+										InsertToCBoxUser();
+										UpdateWindowUser();
+										break;
+									}
+								}
+							}
+						}
+					}
+				}
+				else if (lparam == LPARAM(buttonMakeMod)) {
+					int userID = SendMessage(comboBoxUser, CB_GETCURSEL, (WPARAM)0, (LPARAM)0);
+
+					if (userID != -1) {
+
+						if (MessageBox(m_hwnd, L"Are you sure you want to make this user a moderator?", L"Confirm", MB_OKCANCEL) == IDOK) {
+							for (int i = 0; i <= userList.size(); i++) {
+								if (i == userList.size()) {
+									MessageBox(m_hwnd, L"Could not find this user.", L"Error", MB_OK);
+									break;
+								}
+								if (i == userID) {
+									userList[i].SetMod(true);
+									UpdateUser(userID);
+									MessageBox(m_hwnd, L"User is now a moderator.", L"Success", MB_OK);
+									saveDatabase();
+									readDatabase();
+									UpdateWindowUser();
+									break;
+								}
+							}
+						}
+					}
+				}
 				return 0;
 			}
 
@@ -654,24 +1260,10 @@ public:
 					}
 				}
 				else if (lparam == LPARAM(comboBoxBook)) {
-					LogStruct logStruct;
-					logStruct.LogID = logID;
-					logStruct.LogTitle = logTitle;
-					logStruct.LogIsOwned = logIsOwned;
-					logStruct.LogTimeBorrow = logTimeBorrow;
-					logStruct.LogOwnerID = logOwnerID;
-
-					UpdateWindowBook(logStruct, comboBoxBook);
+					UpdateWindowBook();
 				}
 				else if (lparam == LPARAM(comboBoxUser)) {
-					LogStruct logStruct;
-					logStruct.LogID = logID;
-					logStruct.LogTitle = logTitle;
-					logStruct.LogIsOwned = logIsOwned;
-					logStruct.LogTimeBorrow = logTimeBorrow;
-					logStruct.LogOwnerID = logOwnerID;
-
-					UpdateWindowUser(logStruct, comboBoxUser);
+					UpdateWindowUser();
 				}
 				return 0;
 			}
@@ -696,82 +1288,3 @@ public:
 		return TRUE;
 	}
 };
-
-void UpdateWindowBook(LogStruct logStruct, HWND comboBoxBook){
-	int selection = SendMessage(comboBoxBook, CB_GETCURSEL, (WPARAM)0, (LPARAM)0);
-
-	if (selection == -1) {
-		SendMessage(logStruct.LogID, WM_SETTEXT, (WPARAM)0, (LPARAM)L"");
-		SendMessage(logStruct.LogTitle, WM_SETTEXT, (WPARAM)0, (LPARAM)L"");
-		SendMessage(logStruct.LogIsOwned, WM_SETTEXT, (WPARAM)0, (LPARAM)L"");
-		SendMessage(logStruct.LogTimeBorrow, WM_SETTEXT, (WPARAM)0, (LPARAM)L"");
-		SendMessage(logStruct.LogOwnerID, WM_SETTEXT, (WPARAM)0, (LPARAM)L"");
-	}
-	else {
-		int bookID;
-		std::string bookTitle;
-		int bookOwnerID;
-		int bookTimeBorrow;
-		std::wstring logText;
-
-		for (int i = 0; i < bookList.size(); i++) {
-			if (selection == i) {
-				bookID = bookList[i].getID();
-				bookTitle = bookList[i].getTitle();
-				bookOwnerID = bookList[i].getOwnerID();
-				bookTimeBorrow = bookList[i].getTimeBorrow();
-
-				logText = Widen(bookID);
-				SendMessage(logStruct.LogID, WM_SETTEXT, (WPARAM)0, (LPARAM)logText.c_str());
-
-				logText = Widen(bookTitle);
-				SendMessage(logStruct.LogTitle, WM_SETTEXT, (WPARAM)0, (LPARAM)logText.c_str());
-				
-				if (bookOwnerID == 0) {
-					logText = L"No";
-					SendMessage(logStruct.LogIsOwned, WM_SETTEXT, (WPARAM)0, (LPARAM)logText.c_str());
-				}
-				else{
-					logText = L"Yes";
-					SendMessage(logStruct.LogIsOwned, WM_SETTEXT, (WPARAM)0, (LPARAM)logText.c_str());
-				}
-
-				logText = Widen(bookTimeBorrow);
-				SendMessage(logStruct.LogTimeBorrow, WM_SETTEXT, (WPARAM)0, (LPARAM)logText.c_str());
-
-				logText = Widen(bookOwnerID);
-				SendMessage(logStruct.LogOwnerID, WM_SETTEXT, (WPARAM)0, (LPARAM)logText.c_str());
-			}
-		}
-	}
-}
-
-void UpdateWindowUser(LogStruct logStruct, HWND comboBoxUser) {
-	int selection = SendMessage(comboBoxUser, CB_GETCURSEL, (WPARAM)0, (LPARAM)0);
-
-	if (selection == -1) {
-		SendMessage(logStruct.LogID, WM_SETTEXT, (WPARAM)0, (LPARAM)L"");
-		SendMessage(logStruct.LogTitle, WM_SETTEXT, (WPARAM)0, (LPARAM)L"");
-		SendMessage(logStruct.LogIsOwned, WM_SETTEXT, (WPARAM)0, (LPARAM)L"");
-		SendMessage(logStruct.LogTimeBorrow, WM_SETTEXT, (WPARAM)0, (LPARAM)L"");
-		SendMessage(logStruct.LogOwnerID, WM_SETTEXT, (WPARAM)0, (LPARAM)L"");
-	}
-	else {
-		int userID;
-		std::string userName;
-		std::wstring logText;
-
-		for (int i = 0; i < userList.size(); i++) {
-			if (selection == i) {
-				userID = userList[i].getID();
-				userName = userList[i].getName();
-
-				logText = Widen(userID);
-				SendMessage(logStruct.LogID, WM_SETTEXT, (WPARAM)0, (LPARAM)logText.c_str());
-			
-				logText = Widen(userName);
-				SendMessage(logStruct.LogTitle, WM_SETTEXT, (WPARAM)0, (LPARAM)logText.c_str());
-			}
-		}
-	}
-}

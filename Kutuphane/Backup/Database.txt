@@ -85,8 +85,8 @@ End book
 Start book
 3
 Satranc
-1
-7
+0
+0
 PT 2653 .W42 /S35
 k.1
 Izmir Bakircay Universitesi Kutuphanesi
@@ -99,7 +99,7 @@ Turkce
 Zweig, Stefan
 Almanca aslindan ceviren Ahmet Cemal ; Editor Rûken Kiziler
 2012
-Ò
+978-605-360-611-6
 Istanbul
 Turkiye Is Bankasi Yayinlari 
 
