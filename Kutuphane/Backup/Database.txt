@@ -7,7 +7,7 @@ End user
 Start book
 0
 1984
-0
+-1
 0
 PR 6029.R8/.O79
 k.1
@@ -33,7 +33,7 @@ End book
 Start book
 1
 Yeraltindan Notlar
-0
+-1
 0
 PG 3327/D67T8 Y47
 k.1
@@ -59,7 +59,7 @@ End book
 Start book
 2
 Insanin Anlam Arayisi
-0
+-1
 0
 RC 455.4 .R4 /F73
 k.1
@@ -85,7 +85,7 @@ End book
 Start book
 3
 Satranc
-0
+-1
 0
 PT 2653 .W42 /S35
 k.1
@@ -111,7 +111,7 @@ End book
 Start book
 4
 Ucurtma Avcisi
-0
+-1
 0
 PS 3608 /.H87
 k.2
@@ -137,7 +137,7 @@ End book
 Start book
 5
 Hayvan Ciftligi: Bir Peri Masali
-0
+-1
 0
 PS 3608 /.H87
 k.2
@@ -163,7 +163,7 @@ End book
 Start book
 6
 Savas Sanati
-0
+-1
 0
 U 101 .S86/.S28
 k.1
@@ -189,7 +189,7 @@ End book
 Start book
 7
 Fareler ve Insanlar
-0
+-1
 0
 PS 3537 .S74 /F37
 k.1
@@ -215,7 +215,7 @@ End book
 Start book
 8
 Donusum
-0
+-1
 0
 PT 2621 .A26/V4
 k.1
@@ -241,7 +241,7 @@ End book
 Start book
 9
 Araba Sevdasi
-0
+-1
 0
 PL 248 .R43 /A73
 k.1

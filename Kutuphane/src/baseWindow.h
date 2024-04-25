@@ -168,8 +168,10 @@ public:
 
 	HWND buttonAdd;
 	HWND buttonBorrow;
+	HWND buttonReturn;
 	HWND buttonDelete;
 	HWND buttonMakeMod;
+	HWND buttonUnmakeMod;
 
 	HWND comboBoxPrimary;
 	HWND comboBoxBook;
@@ -297,12 +299,16 @@ public:
 
 	int colAdd = colTextID;
 	int colBorrow = colAdd + 75;
-	int colDelete = colBorrow + 75;
+	int colReturn = colBorrow + 75;
+	int colDelete = colReturn + 75;
 	int colMakeMod = colDelete + 75;
+	int colUnmakeMod = colMakeMod + 75;
 	int rowAdd = rowTextID + 520;
 	int rowBorrow = rowAdd;
-	int rowDelete = rowBorrow;
-	int rowMakeMod = rowDelete;
+	int rowReturn = rowAdd;
+	int rowDelete = rowAdd;
+	int rowMakeMod = rowAdd;
+	int rowUnmakeMod = rowAdd;
 
 	int colCBoxPrim = colLogID + 350;
 	int colCBoxSec = colCBoxPrim + 100;
@@ -344,10 +350,30 @@ public:
 			bookList[selection].SetOwnerID(userID);
 			bookList[selection].SetTimeBorrow(7);
 			UpdateBook(selection);
+			UpdateWindowBook();
 			MessageBox(m_hwnd, L"You have borrowed this book for 7 days.", L"Success", MB_OK);
 		}
 
 		return userID;
+	}
+
+	int ReturnBook() {
+		int selection = SendMessage(comboBoxBook, CB_GETCURSEL, (WPARAM)0, (LPARAM)0);
+
+		if (bookList[selection].getTimeBorrow() == 0) {
+
+			MessageBox(m_hwnd, L"This book is not borrowed.", L"Error", MB_OK);
+		}
+		else {
+			bookList[selection].SetOwnerID(-1);
+			bookList[selection].SetTimeBorrow(0);
+
+			UpdateBook(selection);
+			UpdateWindowBook();
+			MessageBox(m_hwnd, L"You have returned this book.", L"Success", MB_OK);
+		}
+
+		return 0;
 	}
 
 	int Login(std::string name, std::string password) {
@@ -474,6 +500,7 @@ public:
 	void SwitchToBook() {
 		ShowWindow(comboBoxBook, SW_SHOW);
 		ShowWindow(buttonBorrow, SW_SHOW);
+		ShowWindow(buttonReturn, SW_SHOW);
 		ShowWindow(logIsOwned, SW_SHOW);
 		ShowWindow(textIsOwned, SW_SHOW);
 		ShowWindow(logTimeBorrow, SW_SHOW);
@@ -528,12 +555,14 @@ public:
 		ShowWindow(logIsMod, SW_HIDE);
 		ShowWindow(textIsMod, SW_HIDE);
 		ShowWindow(buttonMakeMod, SW_HIDE);
+		ShowWindow(buttonUnmakeMod,	SW_HIDE);
 		UpdateWindowBook();
 	}
 
 	void SwitchToUser(){
 		ShowWindow(comboBoxBook, SW_HIDE);
 		ShowWindow(buttonBorrow, SW_HIDE);
+		ShowWindow(buttonReturn, SW_HIDE);
 		ShowWindow(logIsOwned, SW_HIDE);
 		ShowWindow(textIsOwned, SW_HIDE);
 		ShowWindow(logTimeBorrow, SW_HIDE);
@@ -587,7 +616,13 @@ public:
 		ShowWindow(textName, SW_SHOW);
 		ShowWindow(logIsMod, SW_SHOW);
 		ShowWindow(textIsMod, SW_SHOW);
-		ShowWindow(buttonMakeMod, SW_SHOW);
+		for (int i = 0; i < userList.size(); i++) {
+			if (userList[i].getMod() && userList[i].getLogin()) {
+				ShowWindow(buttonMakeMod, SW_SHOW);
+				ShowWindow(buttonUnmakeMod,	SW_SHOW);
+				break;
+			}
+		}
 		UpdateWindowUser();
 	}
 
@@ -748,8 +783,14 @@ public:
 					}
 					logText = Widen(bookTimeBorrow);
 					SendMessage(logTimeBorrow, WM_SETTEXT, (WPARAM)0, (LPARAM)logText.c_str());
-					logText = Widen(bookOwnerID);
-					SendMessage(logOwnerID, WM_SETTEXT, (WPARAM)0, (LPARAM)logText.c_str());
+					if(bookOwnerID == -1){
+						logText = L"None";
+						SendMessage(logOwnerID, WM_SETTEXT, (WPARAM)0, (LPARAM)logText.c_str());
+					}
+					else{
+						logText = Widen(bookOwnerID);
+						SendMessage(logOwnerID, WM_SETTEXT, (WPARAM)0, (LPARAM)logText.c_str());
+					}
 					logText = Widen(bookPlaceNumber);
 					SendMessage(logPlaceNumber, WM_SETTEXT, (WPARAM)0, (LPARAM)logText.c_str());
 					logText = Widen(bookCopy);
@@ -1028,10 +1069,12 @@ public:
 			textName        = CreateWindow(WC_STATIC, L"Name",                         WS_CHILD | WS_BORDER, colTextTitle, rowTextTitle, 90, 20, m_hwnd, NULL, NULL, NULL); //27
 			textIsMod       = CreateWindow(WC_STATIC, L"Is Mod",                       WS_CHILD | WS_BORDER, colTextIsOwned, rowTextIsOwned, 90, 20, m_hwnd, NULL, NULL, NULL); //28
 
-			buttonBorrow  = CreateWindow(WC_BUTTON, L"Borrow", WS_VISIBLE | WS_CHILD | WS_BORDER, colBorrow, rowBorrow, 60, 20, m_hwnd, NULL, NULL, NULL);
-			buttonAdd     = CreateWindow(WC_BUTTON, L"Add",                 WS_CHILD | WS_BORDER, colAdd, rowAdd, 60, 20, m_hwnd, NULL, NULL, NULL);
-			buttonDelete  = CreateWindow(WC_BUTTON, L"Delete",              WS_CHILD | WS_BORDER, colDelete, rowDelete, 60, 20, m_hwnd, NULL, NULL, NULL);
-			buttonMakeMod = CreateWindow(WC_BUTTON, L"Make Mod",            WS_CHILD | WS_BORDER, colMakeMod, rowMakeMod, 80, 20, m_hwnd, NULL, NULL, NULL);
+			buttonBorrow    = CreateWindow(WC_BUTTON, L"Borrow", WS_VISIBLE | WS_CHILD | WS_BORDER, colBorrow, rowBorrow, 60, 20, m_hwnd, NULL, NULL, NULL);
+			buttonReturn    = CreateWindow(WC_BUTTON, L"Return", WS_VISIBLE | WS_CHILD | WS_BORDER, colReturn, rowReturn, 60, 20, m_hwnd, NULL, NULL, NULL);
+			buttonAdd       = CreateWindow(WC_BUTTON, L"Add",                 WS_CHILD | WS_BORDER, colAdd, rowAdd, 60, 20, m_hwnd, NULL, NULL, NULL);
+			buttonDelete    = CreateWindow(WC_BUTTON, L"Delete",              WS_CHILD | WS_BORDER, colDelete, rowDelete, 60, 20, m_hwnd, NULL, NULL, NULL);
+			buttonMakeMod   = CreateWindow(WC_BUTTON, L"Make Mod",            WS_CHILD | WS_BORDER, colMakeMod, rowMakeMod, 80, 20, m_hwnd, NULL, NULL, NULL);
+			buttonUnmakeMod = CreateWindow(WC_BUTTON, L"Unmake Mod",          WS_CHILD | WS_BORDER, colUnmakeMod, rowUnmakeMod, 80, 20, m_hwnd, NULL, NULL, NULL);
 
 			comboBoxPrimary = CreateWindow(WC_COMBOBOX, L"",              WS_CHILD | WS_OVERLAPPED | CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | CBS_HASSTRINGS, colCBoxPrim, rowCBoxPrim, 80, 500, m_hwnd, NULL, NULL, NULL);
 			comboBoxBook    = CreateWindow(WC_COMBOBOX, L"", WS_VISIBLE | WS_CHILD | WS_OVERLAPPED | CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | CBS_HASSTRINGS, colCBoxSec, rowCBoxSec, 100, 500, m_hwnd, NULL, NULL, NULL);
@@ -1068,9 +1111,10 @@ public:
 					if (BorrowBook() != -1) {
 						saveDatabase();
 						readDatabase();
-						
-						UpdateWindowBook();
 					}
+				}
+				else if (lparam == LPARAM(buttonReturn)) {
+					ReturnBook();
 				}
 				else if (lparam == LPARAM(buttonAdd)) {
 					SwitchToAdd();
@@ -1244,6 +1288,32 @@ public:
 						}
 					}
 				}
+				else if (lparam == LPARAM(buttonUnmakeMod)) {
+					int userID = SendMessage(comboBoxUser, CB_GETCURSEL, (WPARAM)0, (LPARAM)0);
+
+					if (userID != -1) {
+
+						if (MessageBox(m_hwnd, L"Are you sure you want to unmake this user a moderator?", L"Confirm", MB_OKCANCEL) == IDOK) {
+
+							for (int i = 0; i <= userList.size(); i++) {
+								if (i == userList.size()) {
+									MessageBox(m_hwnd, L"Could not find this user.", L"Error", MB_OK);
+									break;
+								}
+								if (i == userID) {
+									userList[i].SetMod(false);
+									UpdateUser(userID);
+									MessageBox(m_hwnd, L"User is no longer a moderator.", L"Success", MB_OK);
+									saveDatabase();
+									readDatabase();
+									UpdateWindowUser();
+									break;
+								}
+							}
+						}
+					}
+				}
+
 				return 0;
 			}
 
